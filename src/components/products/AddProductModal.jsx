@@ -165,7 +165,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 h-10 bg-stone-100 rounded-lg p-1">
                   <TabsTrigger value="url" className="rounded-md text-xs font-medium">
-                    <Link className="h-3.5 w-3.5 mr-1.5" /> From URL
+                    <Link className="h-3.5 w-3.5 mr-1.5" /> Image URL
                   </TabsTrigger>
                   <TabsTrigger value="upload" className="rounded-md text-xs font-medium">
                     <Upload className="h-3.5 w-3.5 mr-1.5" /> Upload
@@ -173,27 +173,12 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
                 </TabsList>
                 
                 <TabsContent value="url" className="mt-3">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Paste product page URL..."
-                      value={formData.product_url}
-                      onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
-                      className="flex-1 h-10 rounded-lg border-stone-200"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={fetchProductInfo}
-                      disabled={fetchingImage}
-                      className="h-10 px-4 rounded-lg border-stone-200"
-                    >
-                      {fetchingImage ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        'Fetch'
-                      )}
-                    </Button>
-                  </div>
+                  <Input
+                    placeholder="Paste image URL (e.g., https://example.com/image.jpg)"
+                    value={formData.image_url}
+                    onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
+                    className="h-10 rounded-lg border-stone-200"
+                  />
                 </TabsContent>
                 
                 <TabsContent value="upload" className="mt-3">
@@ -225,6 +210,17 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
               placeholder="e.g., Summer Dress Collection"
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              className="h-10 rounded-lg border-stone-200"
+            />
+          </div>
+
+          {/* Product URL */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Product Page URL</Label>
+            <Input
+              placeholder="Original product page link..."
+              value={formData.product_url}
+              onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
               className="h-10 rounded-lg border-stone-200"
             />
           </div>
