@@ -109,7 +109,7 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
           <div className="space-y-3">
                 <Label className="text-sm font-medium text-stone-700">Look Image</Label>
                 {formData.image_url ? (
-                  <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden bg-stone-100">
+                  <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-stone-100">
                     <img 
                       src={formData.image_url} 
                       alt="Look" 
@@ -126,7 +126,7 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
                     </Button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors">
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-stone-200 rounded-lg cursor-pointer hover:bg-stone-50 transition-colors">
                     <input
                       type="file"
                       accept="image/*"
@@ -219,14 +219,14 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 h-11 rounded-xl border-stone-200"
+              className="flex-1 h-11 rounded-lg border-stone-200"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="flex-1 h-11 rounded-xl bg-black hover:bg-stone-900 text-white border-0"
+              className="flex-1 h-11 rounded-lg bg-black hover:bg-stone-900 text-white border-0"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

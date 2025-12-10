@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Plus, 
   Search, 
@@ -11,7 +12,8 @@ import {
   List, 
   Heart,
   Loader2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -36,8 +38,12 @@ import {
 import ProductCard from '@/components/products/ProductCard';
 import AddProductModal from '@/components/products/AddProductModal';
 import EmptyState from '@/components/products/EmptyState';
+import LookCard from '@/components/looks/LookCard';
+import AddLookModal from '@/components/looks/AddLookModal';
+import ViewLookModal from '@/components/looks/ViewLookModal';
 
 export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState('products');
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,12 +51,23 @@ export default function Dashboard() {
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  
+  // Looks state
+  const [showAddLookModal, setShowAddLookModal] = useState(false);
+  const [editingLook, setEditingLook] = useState(null);
+  const [viewingLook, setViewingLook] = useState(null);
+  const [deleteLookConfirm, setDeleteLookConfirm] = useState(null);
 
   const queryClient = useQueryClient();
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
     queryFn: () => base44.entities.Product.list('-created_date'),
+  });
+
+  const { data: looks = [], isLoading: looksLoading } = useQuery({
+    queryKey: ['looks'],
+    queryFn: () => base44.entities.Look.list('-created_date'),
   });
 
   const deleteMutation = useMutation({
@@ -67,6 +84,15 @@ export default function Dashboard() {
       base44.entities.Product.update(product.id, { is_favorite: !product.is_favorite }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+  });
+
+  const deleteLookMutation = useMutation({
+    mutationFn: (id) => base44.entities.Look.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['looks'] });
+      toast.success('Look deleted');
+      setDeleteLookConfirm(null);
     },
   });
 
@@ -92,6 +118,16 @@ export default function Dashboard() {
     setEditingProduct(null);
   };
 
+  const handleEditLook = (look) => {
+    setEditingLook(look);
+    setShowAddLookModal(true);
+  };
+
+  const handleCloseLookModal = () => {
+    setShowAddLookModal(false);
+    setEditingLook(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-orange-50/30">
       {/* Header */}
@@ -106,19 +142,32 @@ export default function Dashboard() {
             </div>
             
             <Button
-              onClick={() => setShowAddModal(true)}
+              onClick={() => activeTab === 'products' ? setShowAddModal(true) : setShowAddLookModal(true)}
               className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm"
             >
               <Plus className="h-4 w-4 mr-1.5" />
-              Add Product
+              {activeTab === 'products' ? 'Add Product' : 'Add Look'}
             </Button>
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="grid w-full max-w-md grid-cols-2 h-11 bg-stone-100 rounded-lg p-1">
+            <TabsTrigger value="products" className="rounded-lg text-sm font-medium">
+              All products
+            </TabsTrigger>
+            <TabsTrigger value="looks" className="rounded-lg text-sm font-medium">
+              <Sparkles className="h-4 w-4 mr-1.5" />
+              Shop my style
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="products" className="mt-0">
         {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-8">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -284,8 +333,53 @@ export default function Dashboard() {
               ))}
             </AnimatePresence>
           </div>
-        )}
-      </main>
+          )}
+          </TabsContent>
+
+          <TabsContent value="looks" className="mt-8">
+            {looksLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
+              </div>
+            ) : looks.length === 0 ? (
+              <div className="text-center py-20">
+                <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-rose-100 to-orange-100 flex items-center justify-center mb-6 mx-auto">
+                  <Sparkles className="h-10 w-10 text-rose-500" />
+                </div>
+                <h3 className="text-xl font-semibold text-stone-900 mb-2">
+                  No looks yet
+                </h3>
+                <p className="text-stone-500 text-center max-w-sm mb-8 mx-auto">
+                  Create your first "Shop the Look" collection to showcase curated product combinations.
+                </p>
+                <Button
+                  onClick={() => setShowAddLookModal(true)}
+                  className="h-12 px-6 rounded-lg bg-black hover:bg-stone-900 text-white border-0"
+                >
+                  <Plus className="h-5 w-5 mr-2" />
+                  Create Your First Look
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                <AnimatePresence mode="popLayout">
+                  {looks.map((look) => (
+                    <LookCard
+                      key={look.id}
+                      look={look}
+                      products={products}
+                      onEdit={handleEditLook}
+                      onDelete={(l) => setDeleteLookConfirm(l)}
+                      onViewProducts={(l) => setViewingLook(l)}
+                      isAdmin={true}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </TabsContent>
+          </Tabs>
+          </main>
 
       {/* Add/Edit Modal */}
       <AddProductModal
@@ -298,7 +392,27 @@ export default function Dashboard() {
         editingProduct={editingProduct}
       />
 
-      {/* Delete Confirmation */}
+      {/* Add/Edit Look Modal */}
+      <AddLookModal
+        open={showAddLookModal}
+        onOpenChange={handleCloseLookModal}
+        onLookAdded={() => {
+          queryClient.invalidateQueries({ queryKey: ['looks'] });
+          handleCloseLookModal();
+        }}
+        editingLook={editingLook}
+        products={products}
+      />
+
+      {/* View Look Modal */}
+      <ViewLookModal
+        open={!!viewingLook}
+        onOpenChange={() => setViewingLook(null)}
+        look={viewingLook}
+        products={products}
+      />
+
+      {/* Delete Product Confirmation */}
       <AlertDialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
         <AlertDialogContent className="rounded-lg">
           <AlertDialogHeader>
@@ -318,6 +432,27 @@ export default function Dashboard() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
-  );
-}
+
+      {/* Delete Look Confirmation */}
+      <AlertDialog open={!!deleteLookConfirm} onOpenChange={() => setDeleteLookConfirm(null)}>
+        <AlertDialogContent className="rounded-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Look</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{deleteLookConfirm?.name}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteLookMutation.mutate(deleteLookConfirm.id)}
+              className="rounded-lg bg-red-500 hover:bg-red-600"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      </div>
+      );
+      }

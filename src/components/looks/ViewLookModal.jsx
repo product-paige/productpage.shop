@@ -33,7 +33,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
 
         <div className="space-y-4 mt-4">
           {lookProducts.map((product) => (
-            <div key={product.id} className="flex gap-4 p-4 border border-stone-200 rounded-xl hover:bg-stone-50 transition-colors">
+            <div key={product.id} className="flex gap-4 p-4 border border-stone-200 rounded-lg hover:bg-stone-50 transition-colors">
               <img
                 src={product.image_url || 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=200&h=200&fit=crop'}
                 alt={product.name}
