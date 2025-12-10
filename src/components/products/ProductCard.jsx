@@ -28,31 +28,31 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
     >
-      <Card className="group overflow-hidden border border-amber-900/20 shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 bg-gradient-to-br from-neutral-900 to-neutral-800">
-        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-neutral-800 to-neutral-900">
+      <Card className="group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 bg-white">
+        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-stone-100 to-stone-50">
           <img
             src={product.image_url || placeholderImage}
             alt={product.name}
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-75"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             onError={(e) => { e.target.src = placeholderImage; }}
           />
           
           {/* Overlay actions */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           {/* Top actions */}
-          <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+          <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <Button
               size="icon"
               variant="secondary"
-              className="h-9 w-9 rounded-xl bg-neutral-950/80 hover:bg-neutral-950 backdrop-blur-sm border border-amber-500/20 shadow-xl"
+              className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
               onClick={(e) => { e.stopPropagation(); onToggleFavorite(product); }}
             >
               <Heart 
-                className={`h-4 w-4 transition-colors ${product.is_favorite ? 'fill-amber-500 text-amber-500' : 'text-amber-300'}`} 
+                className={`h-4 w-4 transition-colors ${product.is_favorite ? 'fill-rose-500 text-rose-500' : 'text-stone-600'}`} 
               />
             </Button>
             <DropdownMenu>
@@ -60,19 +60,19 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="h-9 w-9 rounded-xl bg-neutral-950/80 hover:bg-neutral-950 backdrop-blur-sm border border-amber-500/20 shadow-xl"
+                  className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <MoreHorizontal className="h-4 w-4 text-amber-300" />
+                  <MoreHorizontal className="h-4 w-4 text-stone-600" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40 bg-neutral-900 border-amber-900/20">
-                <DropdownMenuItem onClick={() => onEdit(product)} className="text-white focus:bg-neutral-800 focus:text-white">
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem onClick={() => onEdit(product)}>
                   <Pencil className="h-4 w-4 mr-2" /> Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => onDelete(product)}
-                  className="text-red-400 focus:text-red-400 focus:bg-neutral-800"
+                  className="text-red-600 focus:text-red-600"
                 >
                   <Trash2 className="h-4 w-4 mr-2" /> Delete
                 </DropdownMenuItem>
@@ -82,22 +82,22 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
 
           {/* Category badge */}
           {product.category && (
-            <div className="absolute top-4 left-4">
-              <Badge className="bg-gradient-to-r from-amber-600 to-yellow-600 text-neutral-950 hover:from-amber-500 hover:to-yellow-500 border-0 shadow-lg text-xs font-semibold tracking-wide">
+            <div className="absolute top-3 left-3">
+              <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
                 {product.category}
               </Badge>
             </div>
           )}
 
           {/* Bottom actions */}
-          <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-150">
+          <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {product.affiliate_link && (
               <Button
                 size="sm"
-                className="flex-1 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 hover:from-amber-500 hover:via-amber-400 hover:to-yellow-500 text-neutral-950 shadow-xl shadow-amber-500/40 rounded-xl h-10 text-xs font-bold tracking-wide border-0"
+                className="flex-1 bg-white/95 hover:bg-white text-stone-800 shadow-lg rounded-full h-9 text-xs font-medium"
                 onClick={copyAffiliateLink}
               >
-                <Copy className="h-3.5 w-3.5 mr-2" />
+                <Copy className="h-3.5 w-3.5 mr-1.5" />
                 Copy Link
               </Button>
             )}
@@ -105,31 +105,31 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
               <Button
                 size="icon"
                 variant="secondary"
-                className="h-10 w-10 rounded-xl bg-neutral-950/80 hover:bg-neutral-950 backdrop-blur-sm border border-amber-500/20 shadow-xl"
+                className="h-9 w-9 rounded-full bg-white/95 hover:bg-white shadow-lg"
                 onClick={(e) => {
                   e.stopPropagation();
                   window.open(product.product_url, '_blank');
                 }}
               >
-                <ExternalLink className="h-4 w-4 text-amber-300" />
+                <ExternalLink className="h-4 w-4 text-stone-600" />
               </Button>
             )}
           </div>
         </div>
 
-        <div className="p-5" onClick={() => onEdit(product)}>
-          <h3 className="font-semibold text-white truncate text-base mb-2 tracking-tight">
+        <div className="p-4" onClick={() => onEdit(product)}>
+          <h3 className="font-semibold text-stone-900 truncate text-sm mb-1">
             {product.name}
           </h3>
           
           {product.commission_rate && (
-            <p className="text-xs text-amber-400 font-semibold mb-2 tracking-wide uppercase">
+            <p className="text-xs text-emerald-600 font-medium mb-2">
               {product.commission_rate} commission
             </p>
           )}
           
           {product.notes && (
-            <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">
+            <p className="text-xs text-stone-500 line-clamp-2 leading-relaxed">
               {product.notes}
             </p>
           )}
