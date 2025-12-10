@@ -22,6 +22,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
   
   const [formData, setFormData] = useState(editingProduct || {
     name: '',
+    price: '',
     product_url: '',
     affiliate_link: '',
     image_url: '',
@@ -36,6 +37,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     } else {
       setFormData({
         name: '',
+        price: '',
         product_url: '',
         affiliate_link: '',
         image_url: '',
@@ -203,15 +205,26 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             )}
           </div>
 
-          {/* Product Name */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-stone-700">Product Name *</Label>
-            <Input
-              placeholder="e.g., Summer Dress Collection"
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="h-10 rounded-lg border-stone-200"
-            />
+          {/* Product Name & Price */}
+          <div className="grid grid-cols-[1fr,auto] gap-3">
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-stone-700">Product Name *</Label>
+              <Input
+                placeholder="e.g., Summer Dress Collection"
+                value={formData.name}
+                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                className="h-10 rounded-lg border-stone-200"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-stone-700">Price</Label>
+              <Input
+                placeholder="$99"
+                value={formData.price}
+                onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
+                className="h-10 rounded-lg border-stone-200 w-24"
+              />
+            </div>
           </div>
 
           {/* Product URL */}

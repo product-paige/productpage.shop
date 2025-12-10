@@ -118,16 +118,23 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
         </div>
 
         <div className="p-4" onClick={() => onEdit(product)}>
-          <h3 className="font-semibold text-stone-900 truncate text-sm mb-1">
-            {product.name}
-          </h3>
-          
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <h3 className="font-semibold text-stone-900 text-base leading-tight flex-1">
+              {product.name}
+            </h3>
+            {product.price && (
+              <span className="text-base font-semibold text-stone-900 whitespace-nowrap">
+                {product.price}
+              </span>
+            )}
+          </div>
+
           {product.commission_rate && (
             <p className="text-xs text-emerald-600 font-medium mb-2">
               {product.commission_rate} commission
             </p>
           )}
-          
+
           {product.notes && (
             <p className="text-xs text-stone-500 line-clamp-2 leading-relaxed">
               {product.notes}
