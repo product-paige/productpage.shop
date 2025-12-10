@@ -26,6 +26,20 @@ export default function Shop() {
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
+  // Track analytics
+  const trackEvent = async (eventType, productId = null, lookId = null) => {
+    try {
+      await base44.entities.Analytics.create({
+        event_type: eventType,
+        product_id: productId,
+        look_id: lookId,
+        referrer: document.referrer || 'direct',
+      });
+    } catch (error) {
+      console.error('Failed to track event:', error);
+    }
+  };
+
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
     queryFn: () => base44.entities.Product.list('-created_date'),
@@ -184,7 +198,10 @@ export default function Shop() {
                       key={look.id}
                       look={look}
                       products={products}
-                      onViewProducts={(l) => setViewingLook(l)}
+                      onViewProducts={(l) => {
+                        trackEvent('look_view', null, l.id);
+                        setViewingLook(l);
+                      }}
                       isAdmin={false}
                     />
                   ))}
@@ -206,12 +223,19 @@ export default function Shop() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 <AnimatePresence mode="popLayout">
                   {filteredProducts.map((product) => (
-                    <ProductCard
+                    <motion.div
                       key={product.id}
-                      product={product}
-                      onToggleFavorite={() => {}}
-                      isAdmin={false}
-                    />
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      onClick={() => trackEvent('product_view', product.id)}
+                    >
+                      <ProductCard
+                        product={product}
+                        onToggleFavorite={() => {}}
+                        isAdmin={false}
+                      />
+                    </motion.div>
                   ))}
                 </AnimatePresence>
               </div>

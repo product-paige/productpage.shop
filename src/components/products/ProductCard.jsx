@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ExternalLink, Copy, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { base44 } from '@/api/base44Client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +14,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite, isAdmin = true }) {
-  const copyAffiliateLink = (e) => {
+  const copyAffiliateLink = async (e) => {
     e.stopPropagation();
     if (product.affiliate_link) {
       navigator.clipboard.writeText(product.affiliate_link);
       toast.success('Affiliate link copied!');
+      
+      // Track affiliate click
+      if (!isAdmin) {
+        try {
+          await base44.entities.Analytics.create({
+            event_type: 'affiliate_click',
+            product_id: product.id,
+          });
+        } catch (error) {
+          console.error('Failed to track click:', error);
+        }
+      }
     }
   };
 
@@ -108,8 +121,21 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 size="icon"
                 variant="secondary"
                 className="h-9 w-9 rounded-full bg-white/95 hover:bg-white shadow-lg"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
+
+                  // Track click
+                  if (!isAdmin) {
+                    try {
+                      await base44.entities.Analytics.create({
+                        event_type: 'product_click',
+                        product_id: product.id,
+                      });
+                    } catch (error) {
+                      console.error('Failed to track click:', error);
+                    }
+                  }
+
                   window.open(product.affiliate_link, '_blank');
                 }}
               >
