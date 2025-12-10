@@ -4,7 +4,15 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Loader2, Sparkles, Heart } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { Search, Loader2, Sparkles, Heart, SlidersHorizontal } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { motion, AnimatePresence } from 'framer-motion';
 
 import ProductCard from '@/components/products/ProductCard';
@@ -15,6 +23,8 @@ export default function Shop() {
   const [activeTab, setActiveTab] = useState('looks');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewingLook, setViewingLook] = useState(null);
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
@@ -26,9 +36,15 @@ export default function Shop() {
     queryFn: () => base44.entities.Look.list('-created_date'),
   });
 
-  const filteredProducts = products.filter(product =>
-    product.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Get unique categories
+  const categories = [...new Set(products.filter(p => p.category).map(p => p.category))];
+
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = filterCategory === 'all' || product.category === filterCategory;
+    const matchesFavorites = !showFavoritesOnly || product.is_favorite;
+    return matchesSearch && matchesCategory && matchesFavorites;
+  });
 
   const filteredLooks = looks.filter(look =>
     look.name?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -73,16 +89,83 @@ export default function Shop() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Search */}
-          <div className="relative max-w-md mx-auto mt-6">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
-            <Input
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10 rounded-lg border-stone-200 bg-white"
-            />
+          {/* Search & Filters */}
+          <div className="flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto mt-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-10 rounded-lg border-stone-200 bg-white"
+              />
+            </div>
+            
+            {activeTab === 'products' && (
+              <div className="flex gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="h-10 px-4 rounded-lg border-stone-200">
+                      <SlidersHorizontal className="h-4 w-4 mr-2" />
+                      {filterCategory === 'all' ? 'All Categories' : filterCategory}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={() => setFilterCategory('all')}>
+                      All Categories
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {categories.map(cat => (
+                      <DropdownMenuItem key={cat} onClick={() => setFilterCategory(cat)}>
+                        {cat}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <Button
+                  variant={showFavoritesOnly ? "default" : "outline"}
+                  className={`h-10 w-10 rounded-lg border-stone-200 ${showFavoritesOnly ? 'bg-rose-500 hover:bg-rose-600 border-0' : ''}`}
+                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                >
+                  <Heart className={`h-4 w-4 ${showFavoritesOnly ? 'fill-white text-white' : ''}`} />
+                </Button>
+              </div>
+            )}
           </div>
+
+          {/* Active Filters */}
+          {activeTab === 'products' && (filterCategory !== 'all' || showFavoritesOnly || searchQuery) && (
+            <div className="flex flex-wrap gap-2 mt-4 max-w-3xl mx-auto">
+              {filterCategory !== 'all' && (
+                <Badge 
+                  variant="secondary" 
+                  className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
+                  onClick={() => setFilterCategory('all')}
+                >
+                  {filterCategory} ×
+                </Badge>
+              )}
+              {showFavoritesOnly && (
+                <Badge 
+                  variant="secondary" 
+                  className="bg-rose-100 text-rose-700 hover:bg-rose-200 cursor-pointer"
+                  onClick={() => setShowFavoritesOnly(false)}
+                >
+                  Favorites Only ×
+                </Badge>
+              )}
+              {searchQuery && (
+                <Badge 
+                  variant="secondary" 
+                  className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
+                  onClick={() => setSearchQuery('')}
+                >
+                  "{searchQuery}" ×
+                </Badge>
+              )}
+            </div>
+          )}
 
           <TabsContent value="looks" className="mt-8">
             {looksLoading ? (
