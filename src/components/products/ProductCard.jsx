@@ -101,14 +101,14 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 Copy Link
               </Button>
             )}
-            {product.product_url && (
+            {product.affiliate_link && (
               <Button
                 size="icon"
                 variant="secondary"
                 className="h-9 w-9 rounded-full bg-white/95 hover:bg-white shadow-lg"
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.open(product.product_url, '_blank');
+                  window.open(product.affiliate_link, '_blank');
                 }}
               >
                 <ExternalLink className="h-4 w-4 text-stone-600" />
