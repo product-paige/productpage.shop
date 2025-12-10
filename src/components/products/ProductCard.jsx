@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite }) {
+export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite, isAdmin = true }) {
   const copyAffiliateLink = (e) => {
     e.stopPropagation();
     if (product.affiliate_link) {
@@ -55,29 +55,31 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 className={`h-4 w-4 transition-colors ${product.is_favorite ? 'fill-rose-500 text-rose-500' : 'text-stone-600'}`} 
               />
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <MoreHorizontal className="h-4 w-4 text-stone-600" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onClick={() => onEdit(product)}>
-                  <Pencil className="h-4 w-4 mr-2" /> Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => onDelete(product)}
-                  className="text-red-600 focus:text-red-600"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" /> Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {isAdmin && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <MoreHorizontal className="h-4 w-4 text-stone-600" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem onClick={() => onEdit(product)}>
+                    <Pencil className="h-4 w-4 mr-2" /> Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => onDelete(product)}
+                    className="text-red-600 focus:text-red-600"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" /> Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
 
           {/* Category badge */}
@@ -117,7 +119,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
           </div>
         </div>
 
-        <div className="p-4" onClick={() => onEdit(product)}>
+        <div className="p-4" onClick={isAdmin && onEdit ? () => onEdit(product) : undefined}>
           <div className="flex items-start justify-between gap-2 mb-1">
             <h3 className="font-semibold text-stone-900 text-base leading-tight flex-1">
               {product.name}

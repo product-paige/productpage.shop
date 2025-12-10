@@ -45,8 +45,16 @@ export default function Dashboard() {
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [user, setUser] = useState(null);
 
   const queryClient = useQueryClient();
+
+  // Check if user is admin
+  React.useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
+
+  const isAdmin = user?.role === 'admin';
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
@@ -104,14 +112,16 @@ export default function Dashboard() {
               </div>
               <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
             </div>
-            
-            <Button
-              onClick={() => setShowAddModal(true)}
-              className="h-9 px-4 rounded-full bg-black hover:bg-stone-900 text-white border-0 text-sm"
-            >
-              <Plus className="h-4 w-4 mr-1.5" />
-              Add Product
-            </Button>
+
+            {isAdmin && (
+              <Button
+                onClick={() => setShowAddModal(true)}
+                className="h-9 px-4 rounded-full bg-black hover:bg-stone-900 text-white border-0 text-sm"
+              >
+                <Plus className="h-4 w-4 mr-1.5" />
+                Add Product
+              </Button>
+            )}
           </div>
         </div>
       </header>
@@ -277,9 +287,10 @@ export default function Dashboard() {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onEdit={handleEdit}
-                  onDelete={(p) => setDeleteConfirm(p)}
+                  onEdit={isAdmin ? handleEdit : null}
+                  onDelete={isAdmin ? (p) => setDeleteConfirm(p) : null}
                   onToggleFavorite={(p) => toggleFavoriteMutation.mutate(p)}
+                  isAdmin={isAdmin}
                 />
               ))}
             </AnimatePresence>
