@@ -188,7 +188,7 @@ export default function Dashboard() {
                 : 'border-transparent text-stone-500 hover:text-stone-700'
             }`}
           >
-            Shop the Look ({looks.length})
+            Shop my style ({looks.length})
           </button>
         </div>
 
