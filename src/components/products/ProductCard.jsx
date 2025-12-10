@@ -94,7 +94,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
             {product.affiliate_link && (
               <Button
                 size="sm"
-                className="flex-1 bg-white/95 hover:bg-white text-stone-800 shadow-lg rounded-full h-9 text-xs font-medium"
+                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
                 onClick={copyAffiliateLink}
               >
                 <Copy className="h-3.5 w-3.5 mr-1.5" />

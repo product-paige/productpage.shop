@@ -23,7 +23,7 @@ export default function EmptyState({ onAddProduct }) {
       
       <Button
         onClick={onAddProduct}
-        className="h-12 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-lg shadow-rose-500/25"
+        className="h-12 px-6 rounded-xl bg-black hover:bg-stone-900 text-white border-0"
       >
         <Plus className="h-5 w-5 mr-2" />
         Add Your First Product

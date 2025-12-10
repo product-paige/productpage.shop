@@ -107,7 +107,7 @@ export default function Dashboard() {
             
             <Button
               onClick={() => setShowAddModal(true)}
-              className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm"
+              className="h-9 px-4 rounded-full bg-black hover:bg-stone-900 text-white border-0 text-sm"
             >
               <Plus className="h-4 w-4 mr-1.5" />
               Add Product

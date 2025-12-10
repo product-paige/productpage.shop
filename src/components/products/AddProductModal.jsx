@@ -286,7 +286,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             <Button
               type="submit"
               disabled={loading}
-              className="flex-1 h-11 rounded-xl bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0"
+              className="flex-1 h-11 rounded-xl bg-black hover:bg-stone-900 text-white border-0"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
