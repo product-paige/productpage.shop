@@ -36,6 +36,9 @@ import {
 import ProductCard from '@/components/products/ProductCard';
 import AddProductModal from '@/components/products/AddProductModal';
 import EmptyState from '@/components/products/EmptyState';
+import LookCard from '@/components/looks/LookCard';
+import AddLookModal from '@/components/looks/AddLookModal';
+import ViewLookModal from '@/components/looks/ViewLookModal';
 
 export default function Dashboard() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -46,6 +49,11 @@ export default function Dashboard() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [user, setUser] = useState(null);
+  const [showAddLookModal, setShowAddLookModal] = useState(false);
+  const [editingLook, setEditingLook] = useState(null);
+  const [viewingLook, setViewingLook] = useState(null);
+  const [deleteLookConfirm, setDeleteLookConfirm] = useState(null);
+  const [activeTab, setActiveTab] = useState('products');
 
   const queryClient = useQueryClient();
 
@@ -59,6 +67,11 @@ export default function Dashboard() {
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
     queryFn: () => base44.entities.Product.list('-created_date'),
+  });
+
+  const { data: looks = [], isLoading: isLoadingLooks } = useQuery({
+    queryKey: ['looks'],
+    queryFn: () => base44.entities.Look.list('-created_date'),
   });
 
   const deleteMutation = useMutation({
@@ -75,6 +88,15 @@ export default function Dashboard() {
       base44.entities.Product.update(product.id, { is_favorite: !product.is_favorite }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+  });
+
+  const deleteLookMutation = useMutation({
+    mutationFn: (id) => base44.entities.Look.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['looks'] });
+      toast.success('Look deleted');
+      setDeleteLookConfirm(null);
     },
   });
 
@@ -100,6 +122,16 @@ export default function Dashboard() {
     setEditingProduct(null);
   };
 
+  const handleEditLook = (look) => {
+    setEditingLook(look);
+    setShowAddLookModal(true);
+  };
+
+  const handleCloseLookModal = () => {
+    setShowAddLookModal(false);
+    setEditingLook(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-orange-50/30">
       {/* Header */}
@@ -114,19 +146,52 @@ export default function Dashboard() {
             </div>
 
             {isAdmin && (
-              <Button
-                onClick={() => setShowAddModal(true)}
-                className="h-9 px-4 rounded-full bg-black hover:bg-stone-900 text-white border-0 text-sm"
-              >
-                <Plus className="h-4 w-4 mr-1.5" />
-                Add Product
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setShowAddModal(true)}
+                  className="h-9 px-4 rounded-full bg-black hover:bg-stone-900 text-white border-0 text-sm"
+                >
+                  <Plus className="h-4 w-4 mr-1.5" />
+                  Product
+                </Button>
+                <Button
+                  onClick={() => setShowAddLookModal(true)}
+                  className="h-9 px-4 rounded-full bg-black hover:bg-stone-900 text-white border-0 text-sm"
+                >
+                  <Plus className="h-4 w-4 mr-1.5" />
+                  Look
+                </Button>
+              </div>
             )}
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6 border-b border-stone-200">
+          <button
+            onClick={() => setActiveTab('products')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+              activeTab === 'products'
+                ? 'border-black text-black'
+                : 'border-transparent text-stone-500 hover:text-stone-700'
+            }`}
+          >
+            Products ({products.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('looks')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+              activeTab === 'looks'
+                ? 'border-black text-black'
+                : 'border-transparent text-stone-500 hover:text-stone-700'
+            }`}
+          >
+            Shop the Look ({looks.length})
+          </button>
+        </div>
+
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <motion.div 
@@ -265,36 +330,77 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Products Grid/List */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
-          </div>
-        ) : products.length === 0 ? (
-          <EmptyState onAddProduct={() => setShowAddModal(true)} />
-        ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-stone-500">No products match your filters</p>
-          </div>
+        {/* Content */}
+        {activeTab === 'products' ? (
+          <>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
+              </div>
+            ) : products.length === 0 ? (
+              <EmptyState onAddProduct={() => setShowAddModal(true)} />
+            ) : filteredProducts.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-stone-500">No products match your filters</p>
+              </div>
+            ) : (
+              <div className={
+                viewMode === 'grid' 
+                  ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+                  : "flex flex-col gap-4"
+              }>
+                <AnimatePresence mode="popLayout">
+                  {filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      onEdit={isAdmin ? handleEdit : null}
+                      onDelete={isAdmin ? (p) => setDeleteConfirm(p) : null}
+                      onToggleFavorite={(p) => toggleFavoriteMutation.mutate(p)}
+                      isAdmin={isAdmin}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </>
         ) : (
-          <div className={
-            viewMode === 'grid' 
-              ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-              : "flex flex-col gap-4"
-          }>
-            <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onEdit={isAdmin ? handleEdit : null}
-                  onDelete={isAdmin ? (p) => setDeleteConfirm(p) : null}
-                  onToggleFavorite={(p) => toggleFavoriteMutation.mutate(p)}
-                  isAdmin={isAdmin}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
+          <>
+            {isLoadingLooks ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
+              </div>
+            ) : looks.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-stone-500 mb-4">No looks created yet</p>
+                {isAdmin && (
+                  <Button
+                    onClick={() => setShowAddLookModal(true)}
+                    className="h-10 px-6 rounded-xl bg-black hover:bg-stone-900 text-white"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Your First Look
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                <AnimatePresence mode="popLayout">
+                  {looks.map((look) => (
+                    <LookCard
+                      key={look.id}
+                      look={look}
+                      products={products}
+                      onEdit={handleEditLook}
+                      onDelete={(l) => setDeleteLookConfirm(l)}
+                      onViewProducts={(l) => setViewingLook(l)}
+                      isAdmin={isAdmin}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </>
         )}
       </main>
 
@@ -309,7 +415,26 @@ export default function Dashboard() {
         editingProduct={editingProduct}
       />
 
-      {/* Delete Confirmation */}
+      {/* Modals */}
+      <AddLookModal
+        open={showAddLookModal}
+        onOpenChange={handleCloseLookModal}
+        onLookAdded={() => {
+          queryClient.invalidateQueries({ queryKey: ['looks'] });
+          handleCloseLookModal();
+        }}
+        editingLook={editingLook}
+        products={products}
+      />
+
+      <ViewLookModal
+        open={!!viewingLook}
+        onOpenChange={() => setViewingLook(null)}
+        look={viewingLook}
+        products={products}
+      />
+
+      {/* Delete Confirmations */}
       <AlertDialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
         <AlertDialogContent className="rounded-2xl">
           <AlertDialogHeader>
@@ -322,6 +447,26 @@ export default function Dashboard() {
             <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteMutation.mutate(deleteConfirm.id)}
+              className="rounded-xl bg-red-500 hover:bg-red-600"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!deleteLookConfirm} onOpenChange={() => setDeleteLookConfirm(null)}>
+        <AlertDialogContent className="rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Look</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{deleteLookConfirm?.name}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteLookMutation.mutate(deleteLookConfirm.id)}
               className="rounded-xl bg-red-500 hover:bg-red-600"
             >
               Delete
