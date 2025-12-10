@@ -10,7 +10,7 @@ export default function EmptyState({ onAddProduct }) {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center justify-center py-20 px-4"
     >
-      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-rose-100 to-orange-100 flex items-center justify-center mb-6">
+      <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-rose-100 to-orange-100 flex items-center justify-center mb-6">
         <Package className="h-10 w-10 text-rose-500" />
       </div>
       
@@ -23,7 +23,7 @@ export default function EmptyState({ onAddProduct }) {
       
       <Button
         onClick={onAddProduct}
-        className="h-12 px-6 rounded-xl bg-black hover:bg-stone-900 text-white border-0"
+        className="h-12 px-6 rounded-lg bg-black hover:bg-stone-900 text-white border-0"
       >
         <Plus className="h-5 w-5 mr-2" />
         Add Your First Product

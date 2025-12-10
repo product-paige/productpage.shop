@@ -147,7 +147,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             <Label className="text-sm font-medium text-stone-700">Product Image</Label>
             
             {formData.image_url ? (
-              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-stone-100">
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-stone-100">
                 <img 
                   src={formData.image_url} 
                   alt="Product" 
@@ -184,7 +184,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
                 </TabsContent>
                 
                 <TabsContent value="upload" className="mt-3">
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors">
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-stone-200 rounded-lg cursor-pointer hover:bg-stone-50 transition-colors">
                     <input
                       type="file"
                       accept="image/*"
@@ -288,14 +288,14 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 h-11 rounded-xl border-stone-200"
+              className="flex-1 h-11 rounded-lg border-stone-200"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="flex-1 h-11 rounded-xl bg-black hover:bg-stone-900 text-white border-0"
+              className="flex-1 h-11 rounded-lg bg-black hover:bg-stone-900 text-white border-0"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

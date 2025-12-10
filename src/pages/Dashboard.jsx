@@ -99,7 +99,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">A</span>
               </div>
               <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
@@ -122,7 +122,7 @@ export default function Dashboard() {
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
           >
             <p className="text-xs text-stone-500 font-medium mb-1">Total Products</p>
             <p className="text-2xl font-bold text-stone-900">{products.length}</p>
@@ -131,7 +131,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
           >
             <p className="text-xs text-stone-500 font-medium mb-1">With Links</p>
             <p className="text-2xl font-bold text-stone-900">
@@ -142,7 +142,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
           >
             <p className="text-xs text-stone-500 font-medium mb-1">Categories</p>
             <p className="text-2xl font-bold text-stone-900">{categories.length}</p>
@@ -151,7 +151,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
           >
             <p className="text-xs text-stone-500 font-medium mb-1">Favorites</p>
             <p className="text-2xl font-bold text-stone-900">
@@ -168,14 +168,14 @@ export default function Dashboard() {
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10 rounded-xl border-stone-200 bg-white"
+              className="pl-10 h-10 rounded-lg border-stone-200 bg-white"
             />
           </div>
           
           <div className="flex gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-10 px-4 rounded-xl border-stone-200">
+                <Button variant="outline" className="h-10 px-4 rounded-lg border-stone-200">
                   <SlidersHorizontal className="h-4 w-4 mr-2" />
                   {filterCategory === 'all' ? 'All Categories' : filterCategory}
                 </Button>
@@ -195,13 +195,13 @@ export default function Dashboard() {
 
             <Button
               variant={showFavoritesOnly ? "default" : "outline"}
-              className={`h-10 w-10 rounded-xl border-stone-200 ${showFavoritesOnly ? 'bg-rose-500 hover:bg-rose-600 border-0' : ''}`}
+              className={`h-10 w-10 rounded-lg border-stone-200 ${showFavoritesOnly ? 'bg-rose-500 hover:bg-rose-600 border-0' : ''}`}
               onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             >
               <Heart className={`h-4 w-4 ${showFavoritesOnly ? 'fill-white text-white' : ''}`} />
             </Button>
 
-            <div className="flex bg-stone-100 rounded-xl p-1">
+            <div className="flex bg-stone-100 rounded-lg p-1">
               <Button
                 variant="ghost"
                 size="icon"
@@ -300,7 +300,7 @@ export default function Dashboard() {
 
       {/* Delete Confirmation */}
       <AlertDialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
-        <AlertDialogContent className="rounded-2xl">
+        <AlertDialogContent className="rounded-lg">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Product</AlertDialogTitle>
             <AlertDialogDescription>
@@ -308,10 +308,10 @@ export default function Dashboard() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteMutation.mutate(deleteConfirm.id)}
-              className="rounded-xl bg-red-500 hover:bg-red-600"
+              className="rounded-lg bg-red-500 hover:bg-red-600"
             >
               Delete
             </AlertDialogAction>
