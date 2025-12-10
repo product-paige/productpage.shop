@@ -178,7 +178,7 @@ export default function Dashboard() {
                 : 'border-transparent text-stone-500 hover:text-stone-700'
             }`}
           >
-            Products ({products.length})
+            All products ({products.length})
           </button>
           <button
             onClick={() => setActiveTab('looks')}
