@@ -95,16 +95,15 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
             {editingLook ? 'Edit Look' : 'Create New Look'}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-5 mt-4 flex-1 overflow-hidden flex flex-col">
-          <ScrollArea className="flex-1 pr-4">
-            <div className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5 mt-4">
+          <div className="space-y-5">
               {/* Image */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium text-stone-700">Look Image</Label>
@@ -199,10 +198,10 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
                 </div>
               </div>
             </div>
-          </ScrollArea>
+          </div>
 
           {/* Submit */}
-          <div className="flex gap-3 pt-4 border-t">
+          <div className="flex gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
