@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Loader2, ImageIcon, X } from 'lucide-react';
+import { Upload, Loader2, ImageIcon, X, Search } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 export default function AddLookModal({ open, onOpenChange, onLookAdded, editingLook, products }) {
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [productSearch, setProductSearch] = useState('');
   
   const [formData, setFormData] = useState(editingLook || {
     name: '',
@@ -37,6 +38,7 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
         product_ids: [],
       });
     }
+    setProductSearch('');
   }, [editingLook, open]);
 
   const handleImageUpload = async (e) => {
@@ -170,11 +172,25 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
                 <Label className="text-sm font-medium text-stone-700">
                   Select Products * ({formData.product_ids?.length || 0} selected)
                 </Label>
+                <div className="relative mb-2">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                  <Input
+                    placeholder="Search products..."
+                    value={productSearch}
+                    onChange={(e) => setProductSearch(e.target.value)}
+                    className="pl-9 h-9 rounded-lg border-stone-200"
+                  />
+                </div>
                 <div className="border border-stone-200 rounded-lg p-3 space-y-2 max-h-64 overflow-y-auto">
                   {products.length === 0 ? (
                     <p className="text-sm text-stone-500 text-center py-4">No products available</p>
                   ) : (
-                    products.map(product => (
+                    products
+                      .filter(p => 
+                        p.name?.toLowerCase().includes(productSearch.toLowerCase()) ||
+                        p.category?.toLowerCase().includes(productSearch.toLowerCase())
+                      )
+                      .map(product => (
                       <div key={product.id} className="flex items-center gap-3 p-2 hover:bg-stone-50 rounded-lg transition-colors">
                         <Checkbox
                           checked={formData.product_ids?.includes(product.id)}
