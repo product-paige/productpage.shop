@@ -103,9 +103,8 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 mt-4">
-          <div className="space-y-5">
-              {/* Image */}
-              <div className="space-y-3">
+          {/* Image */}
+          <div className="space-y-3">
                 <Label className="text-sm font-medium text-stone-700">Look Image</Label>
                 {formData.image_url ? (
                   <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden bg-stone-100">
@@ -197,8 +196,6 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
                   )}
                 </div>
               </div>
-            </div>
-          </div>
 
           {/* Submit */}
           <div className="flex gap-3 pt-4">
