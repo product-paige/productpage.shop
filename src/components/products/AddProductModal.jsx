@@ -132,9 +132,9 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-br from-neutral-900 to-neutral-800 border-amber-900/20 text-white">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">
+          <DialogTitle className="text-2xl font-semibold text-white">
             {editingProduct ? 'Edit Product' : 'Add New Product'}
           </DialogTitle>
         </DialogHeader>
@@ -279,14 +279,14 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 h-11 rounded-xl border-stone-200"
+              className="flex-1 h-12 rounded-xl border-amber-900/20 bg-transparent text-white hover:bg-neutral-800 hover:text-white"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="flex-1 h-11 rounded-xl bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0"
+              className="flex-1 h-12 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 hover:from-amber-500 hover:via-amber-400 hover:to-yellow-500 text-neutral-950 border-0 shadow-xl shadow-amber-500/30 font-semibold"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

@@ -93,23 +93,23 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-orange-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950">
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/80 border-b border-stone-100">
+      <header className="sticky top-0 z-40 backdrop-blur-2xl bg-neutral-950/60 border-b border-amber-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
+          <div className="flex items-center justify-between h-20">
+            <div className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-600 via-amber-500 to-yellow-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                <span className="text-neutral-950 font-bold text-lg">A</span>
               </div>
-              <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
+              <h1 className="text-xl font-semibold text-white tracking-tight">Affiliate Collection</h1>
             </div>
             
             <Button
               onClick={() => setShowAddModal(true)}
-              className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm"
+              className="h-11 px-6 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 hover:from-amber-500 hover:via-amber-400 hover:to-yellow-500 text-neutral-950 border-0 shadow-lg shadow-amber-500/30 text-sm font-semibold"
             >
-              <Plus className="h-4 w-4 mr-1.5" />
+              <Plus className="h-4 w-4 mr-2" />
               Add Product
             </Button>
           </div>
@@ -118,23 +118,23 @@ export default function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-amber-900/20 shadow-xl"
           >
-            <p className="text-xs text-stone-500 font-medium mb-1">Total Products</p>
-            <p className="text-2xl font-bold text-stone-900">{products.length}</p>
+            <p className="text-xs text-amber-500/70 font-medium mb-2 uppercase tracking-wider">Total Products</p>
+            <p className="text-3xl font-bold text-white">{products.length}</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-amber-900/20 shadow-xl"
           >
-            <p className="text-xs text-stone-500 font-medium mb-1">With Links</p>
-            <p className="text-2xl font-bold text-stone-900">
+            <p className="text-xs text-amber-500/70 font-medium mb-2 uppercase tracking-wider">With Links</p>
+            <p className="text-3xl font-bold text-white">
               {products.filter(p => p.affiliate_link).length}
             </p>
           </motion.div>
@@ -142,51 +142,51 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-amber-900/20 shadow-xl"
           >
-            <p className="text-xs text-stone-500 font-medium mb-1">Categories</p>
-            <p className="text-2xl font-bold text-stone-900">{categories.length}</p>
+            <p className="text-xs text-amber-500/70 font-medium mb-2 uppercase tracking-wider">Categories</p>
+            <p className="text-3xl font-bold text-white">{categories.length}</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm"
+            className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-amber-900/20 shadow-xl"
           >
-            <p className="text-xs text-stone-500 font-medium mb-1">Favorites</p>
-            <p className="text-2xl font-bold text-stone-900">
+            <p className="text-xs text-amber-500/70 font-medium mb-2 uppercase tracking-wider">Favorites</p>
+            <p className="text-3xl font-bold text-white">
               {products.filter(p => p.is_favorite).length}
             </p>
           </motion.div>
         </div>
 
         {/* Filters & Search */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-amber-500/50" />
             <Input
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10 rounded-xl border-stone-200 bg-white"
+              className="pl-11 h-12 rounded-xl border border-amber-900/20 bg-neutral-900 text-white placeholder:text-neutral-500 focus:border-amber-500/50 focus:ring-amber-500/20"
             />
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-10 px-4 rounded-xl border-stone-200">
+                <Button variant="outline" className="h-12 px-5 rounded-xl border-amber-900/20 bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white">
                   <SlidersHorizontal className="h-4 w-4 mr-2" />
                   {filterCategory === 'all' ? 'All Categories' : filterCategory}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={() => setFilterCategory('all')}>
+              <DropdownMenuContent align="end" className="w-48 bg-neutral-900 border-amber-900/20">
+                <DropdownMenuItem onClick={() => setFilterCategory('all')} className="text-white focus:bg-neutral-800 focus:text-white">
                   All Categories
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-amber-900/20" />
                 {categories.map(cat => (
-                  <DropdownMenuItem key={cat} onClick={() => setFilterCategory(cat)}>
+                  <DropdownMenuItem key={cat} onClick={() => setFilterCategory(cat)} className="text-white focus:bg-neutral-800 focus:text-white">
                     {cat}
                   </DropdownMenuItem>
                 ))}
@@ -195,17 +195,17 @@ export default function Dashboard() {
 
             <Button
               variant={showFavoritesOnly ? "default" : "outline"}
-              className={`h-10 w-10 rounded-xl border-stone-200 ${showFavoritesOnly ? 'bg-rose-500 hover:bg-rose-600 border-0' : ''}`}
+              className={`h-12 w-12 rounded-xl ${showFavoritesOnly ? 'bg-gradient-to-br from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 border-0 shadow-lg shadow-amber-500/30' : 'border-amber-900/20 bg-neutral-900 hover:bg-neutral-800'}`}
               onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             >
-              <Heart className={`h-4 w-4 ${showFavoritesOnly ? 'fill-white text-white' : ''}`} />
+              <Heart className={`h-4 w-4 ${showFavoritesOnly ? 'fill-neutral-950 text-neutral-950' : 'text-white'}`} />
             </Button>
 
-            <div className="flex bg-stone-100 rounded-xl p-1">
+            <div className="flex bg-neutral-900 border border-amber-900/20 rounded-xl p-1.5">
               <Button
                 variant="ghost"
                 size="icon"
-                className={`h-8 w-8 rounded-lg ${viewMode === 'grid' ? 'bg-white shadow-sm' : ''}`}
+                className={`h-9 w-9 rounded-lg ${viewMode === 'grid' ? 'bg-gradient-to-br from-amber-600 to-yellow-600 text-neutral-950 shadow-md' : 'text-white hover:bg-neutral-800 hover:text-white'}`}
                 onClick={() => setViewMode('grid')}
               >
                 <Grid3X3 className="h-4 w-4" />
@@ -213,7 +213,7 @@ export default function Dashboard() {
               <Button
                 variant="ghost"
                 size="icon"
-                className={`h-8 w-8 rounded-lg ${viewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
+                className={`h-9 w-9 rounded-lg ${viewMode === 'list' ? 'bg-gradient-to-br from-amber-600 to-yellow-600 text-neutral-950 shadow-md' : 'text-white hover:bg-neutral-800 hover:text-white'}`}
                 onClick={() => setViewMode('list')}
               >
                 <List className="h-4 w-4" />
@@ -228,7 +228,7 @@ export default function Dashboard() {
             {filterCategory !== 'all' && (
               <Badge 
                 variant="secondary" 
-                className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
+                className="bg-neutral-800 text-amber-400 hover:bg-neutral-700 cursor-pointer border border-amber-900/20 px-3 py-1"
                 onClick={() => setFilterCategory('all')}
               >
                 {filterCategory} ×
@@ -237,7 +237,7 @@ export default function Dashboard() {
             {showFavoritesOnly && (
               <Badge 
                 variant="secondary" 
-                className="bg-rose-100 text-rose-700 hover:bg-rose-200 cursor-pointer"
+                className="bg-neutral-800 text-amber-400 hover:bg-neutral-700 cursor-pointer border border-amber-900/20 px-3 py-1"
                 onClick={() => setShowFavoritesOnly(false)}
               >
                 Favorites Only ×
@@ -246,7 +246,7 @@ export default function Dashboard() {
             {searchQuery && (
               <Badge 
                 variant="secondary" 
-                className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
+                className="bg-neutral-800 text-amber-400 hover:bg-neutral-700 cursor-pointer border border-amber-900/20 px-3 py-1"
                 onClick={() => setSearchQuery('')}
               >
                 "{searchQuery}" ×
@@ -258,18 +258,18 @@ export default function Dashboard() {
         {/* Products Grid/List */}
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
           </div>
         ) : products.length === 0 ? (
           <EmptyState onAddProduct={() => setShowAddModal(true)} />
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-stone-500">No products match your filters</p>
+            <p className="text-neutral-400">No products match your filters</p>
           </div>
         ) : (
           <div className={
             viewMode === 'grid' 
-              ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
               : "flex flex-col gap-4"
           }>
             <AnimatePresence mode="popLayout">
