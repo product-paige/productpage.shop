@@ -137,7 +137,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
               </Badge>
             )}
             {product.category && (
-              <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
+              <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 text-xs font-medium shadow-none">
                 {product.category}
               </Badge>
             )}

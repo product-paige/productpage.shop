@@ -40,7 +40,7 @@ export default function BrandCard({ brand }) {
                 {brand.name}
               </h3>
               {brand.category && (
-                <Badge className="bg-black text-white hover:bg-stone-900 text-xs">
+                <Badge className="bg-black text-white hover:bg-stone-900 text-xs shadow-none">
                   {brand.category}
                 </Badge>
               )}
