@@ -84,7 +84,7 @@ export default function LookCard({ look, products, onEdit, onDelete, onViewProdu
         </div>
 
         <div className="p-4">
-          <h3 className="font-semibold text-stone-900 text-base leading-tight mb-1">
+          <h3 className="font-semibold text-stone-900 text-lg leading-tight mb-1">
             {look.name}
           </h3>
           {look.description && (
