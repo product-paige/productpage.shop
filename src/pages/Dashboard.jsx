@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Plus, 
-  Search, 
-  Grid3X3, 
-  List, 
+import {
+  Plus,
+  Search,
+  Grid3X3,
+  List,
   Heart,
   Loader2,
   SlidersHorizontal,
@@ -23,8 +23,8 @@ import {
   Package,
   MoreHorizontal,
   Pencil,
-  Trash2
-} from 'lucide-react';
+  Trash2 } from
+'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import {
@@ -32,8 +32,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuSeparator } from
+"@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,8 +42,8 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  AlertDialogTitle } from
+"@/components/ui/alert-dialog";
 
 import ProductCard from '@/components/products/ProductCard';
 import AddProductModal from '@/components/products/AddProductModal';
@@ -64,7 +64,7 @@ export default function Dashboard() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
-  
+
   // Looks state
   const [showAddLookModal, setShowAddLookModal] = useState(false);
   const [editingLook, setEditingLook] = useState(null);
@@ -80,22 +80,22 @@ export default function Dashboard() {
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
-    queryFn: () => base44.entities.Product.list('-created_date'),
+    queryFn: () => base44.entities.Product.list('-created_date')
   });
 
   const { data: looks = [], isLoading: looksLoading } = useQuery({
     queryKey: ['looks'],
-    queryFn: () => base44.entities.Look.list('-created_date'),
+    queryFn: () => base44.entities.Look.list('-created_date')
   });
 
   const { data: collections = [] } = useQuery({
     queryKey: ['collections'],
-    queryFn: () => base44.entities.Collection.list('-created_date'),
+    queryFn: () => base44.entities.Collection.list('-created_date')
   });
 
   const { data: analytics = [] } = useQuery({
     queryKey: ['analytics'],
-    queryFn: () => base44.entities.Analytics.list('-created_date', 1000),
+    queryFn: () => base44.entities.Analytics.list('-created_date', 1000)
   });
 
   const deleteMutation = useMutation({
@@ -104,15 +104,15 @@ export default function Dashboard() {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       toast.success('Product deleted');
       setDeleteConfirm(null);
-    },
+    }
   });
 
   const toggleFavoriteMutation = useMutation({
-    mutationFn: (product) => 
-      base44.entities.Product.update(product.id, { is_favorite: !product.is_favorite }),
+    mutationFn: (product) =>
+    base44.entities.Product.update(product.id, { is_favorite: !product.is_favorite }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
-    },
+    }
   });
 
   const deleteLookMutation = useMutation({
@@ -121,7 +121,7 @@ export default function Dashboard() {
       queryClient.invalidateQueries({ queryKey: ['looks'] });
       toast.success('Look deleted');
       setDeleteLookConfirm(null);
-    },
+    }
   });
 
   const deleteCollectionMutation = useMutation({
@@ -130,24 +130,24 @@ export default function Dashboard() {
       queryClient.invalidateQueries({ queryKey: ['collections'] });
       toast.success('Collection deleted');
       setDeleteCollectionConfirm(null);
-    },
+    }
   });
 
   // Get unique categories and subcategories combined
   const allCategories = [
-    ...new Set([
-      ...products.filter(p => p.category).map(p => p.category),
-      ...products.filter(p => p.subcategory).map(p => p.subcategory)
-    ])
-  ].sort();
+  ...new Set([
+  ...products.filter((p) => p.category).map((p) => p.category),
+  ...products.filter((p) => p.subcategory).map((p) => p.subcategory)]
+  )].
+  sort();
 
   // Filter products
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          product.notes?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategories.length === 0 || 
-                           selectedCategories.includes(product.category) || 
-                           selectedCategories.includes(product.subcategory);
+    product.notes?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategories.length === 0 ||
+    selectedCategories.includes(product.category) ||
+    selectedCategories.includes(product.subcategory);
     const matchesFavorites = !showFavoritesOnly || product.is_favorite;
     return matchesSearch && matchesCategory && matchesFavorites;
   });
@@ -174,9 +174,9 @@ export default function Dashboard() {
 
   // Analytics calculations
   const analyticsMetrics = useMemo(() => {
-    const totalClicks = analytics.filter(a => a.event_type === 'affiliate_click').length;
-    const totalViews = analytics.filter(a => a.event_type === 'product_view').length;
-    const lookViews = analytics.filter(a => a.event_type === 'look_view').length;
+    const totalClicks = analytics.filter((a) => a.event_type === 'affiliate_click').length;
+    const totalViews = analytics.filter((a) => a.event_type === 'product_view').length;
+    const lookViews = analytics.filter((a) => a.event_type === 'look_view').length;
     return { totalClicks, totalViews, lookViews };
   }, [analytics]);
 
@@ -186,9 +186,9 @@ export default function Dashboard() {
       return { date: format(date, 'MMM d'), clicks: 0, views: 0 };
     });
 
-    analytics.forEach(event => {
+    analytics.forEach((event) => {
       const eventDate = startOfDay(new Date(event.created_date));
-      const dayIndex = last7Days.findIndex(d => {
+      const dayIndex = last7Days.findIndex((d) => {
         const targetDate = subDays(new Date(), 6 - last7Days.indexOf(d));
         return startOfDay(targetDate).getTime() === eventDate.getTime();
       });
@@ -207,8 +207,8 @@ export default function Dashboard() {
 
   const topProducts = useMemo(() => {
     const productStats = {};
-    
-    analytics.forEach(event => {
+
+    analytics.forEach((event) => {
       if (event.product_id && (event.event_type === 'affiliate_click' || event.event_type === 'product_click')) {
         if (!productStats[event.product_id]) {
           productStats[event.product_id] = { clicks: 0, views: 0 };
@@ -225,18 +225,18 @@ export default function Dashboard() {
       }
     });
 
-    return Object.entries(productStats)
-      .map(([productId, stats]) => {
-        const product = products.find(p => p.id === productId);
-        return {
-          id: productId,
-          name: product?.name || 'Unknown Product',
-          ...stats,
-          conversionRate: stats.views > 0 ? ((stats.clicks / stats.views) * 100).toFixed(1) : 0,
-        };
-      })
-      .sort((a, b) => b.clicks - a.clicks)
-      .slice(0, 10);
+    return Object.entries(productStats).
+    map(([productId, stats]) => {
+      const product = products.find((p) => p.id === productId);
+      return {
+        id: productId,
+        name: product?.name || 'Unknown Product',
+        ...stats,
+        conversionRate: stats.views > 0 ? (stats.clicks / stats.views * 100).toFixed(1) : 0
+      };
+    }).
+    sort((a, b) => b.clicks - a.clicks).
+    slice(0, 10);
   }, [analytics, products]);
 
   const eventDistribution = useMemo(() => {
@@ -244,10 +244,10 @@ export default function Dashboard() {
       'Affiliate Clicks': 0,
       'Product Views': 0,
       'Look Views': 0,
-      'Product Clicks': 0,
+      'Product Clicks': 0
     };
 
-    analytics.forEach(event => {
+    analytics.forEach((event) => {
       if (event.event_type === 'affiliate_click') dist['Affiliate Clicks'] += 1;
       if (event.event_type === 'product_view') dist['Product Views'] += 1;
       if (event.event_type === 'look_view') dist['Look Views'] += 1;
@@ -269,25 +269,25 @@ export default function Dashboard() {
               <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">A</span>
               </div>
-              <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
+              <h1 className="text-lg font-semibold text-stone-900">Spotlight.Shop</h1>
             </div>
 
             <div className="flex items-center gap-3">
               <Button
                 onClick={() => window.location.href = '/settings'}
                 variant="outline"
-                className="h-9 px-4 rounded-full"
-              >
+                className="h-9 px-4 rounded-full">
+
                 Settings
               </Button>
               <Button
                 onClick={() => {
-                  if (activeTab === 'products') setShowAddModal(true);
-                  else if (activeTab === 'looks') setShowAddLookModal(true);
-                  else setShowCollectionModal(true);
+                  if (activeTab === 'products') setShowAddModal(true);else
+                  if (activeTab === 'looks') setShowAddLookModal(true);else
+                  setShowCollectionModal(true);
                 }}
-                className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm"
-              >
+                className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm">
+
                 <Plus className="h-4 w-4 mr-1.5" />
                 {activeTab === 'products' ? 'Add Product' : activeTab === 'looks' ? 'Add Look' : 'Add Collection'}
               </Button>
@@ -320,43 +320,43 @@ export default function Dashboard() {
           <TabsContent value="products" className="mt-0">
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-8">
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
-          >
+          <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm">
+
             <p className="text-xs text-stone-500 font-medium mb-1">Total Products</p>
             <p className="text-2xl font-bold text-stone-900" style={{ fontFamily: 'Instrument Serif, serif' }}>{products.length}</p>
           </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
-          >
+          <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm">
+
             <p className="text-xs text-stone-500 font-medium mb-1">With Links</p>
             <p className="text-2xl font-bold text-stone-900" style={{ fontFamily: 'Instrument Serif, serif' }}>
-              {products.filter(p => p.affiliate_link).length}
+              {products.filter((p) => p.affiliate_link).length}
             </p>
           </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
-          >
+          <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm">
+
             <p className="text-xs text-stone-500 font-medium mb-1">Categories</p>
             <p className="text-2xl font-bold text-stone-900" style={{ fontFamily: 'Instrument Serif, serif' }}>{allCategories.length}</p>
           </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
-          >
+          <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm">
+
             <p className="text-xs text-stone-500 font-medium mb-1">Favorites</p>
             <p className="text-2xl font-bold text-stone-900" style={{ fontFamily: 'Instrument Serif, serif' }}>
-              {products.filter(p => p.is_favorite).length}
+              {products.filter((p) => p.is_favorite).length}
             </p>
           </motion.div>
         </div>
@@ -366,11 +366,11 @@ export default function Dashboard() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
             <Input
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10 rounded-lg border-stone-200 bg-white"
-            />
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 h-10 rounded-lg border-stone-200 bg-white" />
+
           </div>
           
           <div className="flex gap-2">
@@ -387,70 +387,70 @@ export default function Dashboard() {
                 </div>
                 <DropdownMenuSeparator />
                 <div className="max-h-64 overflow-y-auto">
-                  {allCategories.map(cat => (
-                    <DropdownMenuItem 
-                      key={cat} 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSelectedCategories(prev => 
-                          prev.includes(cat) 
-                            ? prev.filter(c => c !== cat)
-                            : [...prev, cat]
-                        );
-                      }}
-                      className="flex items-center gap-2 cursor-pointer"
-                    >
-                      <Checkbox
-                        checked={selectedCategories.includes(cat)}
-                        onCheckedChange={(checked) => {
-                          setSelectedCategories(prev => 
-                            checked 
-                              ? [...prev, cat]
-                              : prev.filter(c => c !== cat)
+                  {allCategories.map((cat) =>
+                      <DropdownMenuItem
+                        key={cat}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelectedCategories((prev) =>
+                          prev.includes(cat) ?
+                          prev.filter((c) => c !== cat) :
+                          [...prev, cat]
                           );
                         }}
-                      />
+                        className="flex items-center gap-2 cursor-pointer">
+
+                      <Checkbox
+                          checked={selectedCategories.includes(cat)}
+                          onCheckedChange={(checked) => {
+                            setSelectedCategories((prev) =>
+                            checked ?
+                            [...prev, cat] :
+                            prev.filter((c) => c !== cat)
+                            );
+                          }} />
+
                       <span className="text-sm">{cat}</span>
                     </DropdownMenuItem>
-                  ))}
+                      )}
                 </div>
-                {selectedCategories.length > 0 && (
-                  <>
+                {selectedCategories.length > 0 &&
+                    <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      onClick={() => setSelectedCategories([])}
-                      className="text-xs text-stone-500 justify-center"
-                    >
+                    <DropdownMenuItem
+                        onClick={() => setSelectedCategories([])}
+                        className="text-xs text-stone-500 justify-center">
+
                       Clear all
                     </DropdownMenuItem>
                   </>
-                )}
+                    }
               </DropdownMenuContent>
             </DropdownMenu>
 
             <Button
-              variant={showFavoritesOnly ? "default" : "outline"}
-              className={`h-10 w-10 rounded-lg border-stone-200 ${showFavoritesOnly ? 'bg-rose-500 hover:bg-rose-600 border-0' : ''}`}
-              onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-            >
+                  variant={showFavoritesOnly ? "default" : "outline"}
+                  className={`h-10 w-10 rounded-lg border-stone-200 ${showFavoritesOnly ? 'bg-rose-500 hover:bg-rose-600 border-0' : ''}`}
+                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}>
+
               <Heart className={`h-4 w-4 ${showFavoritesOnly ? 'fill-white text-white' : ''}`} />
             </Button>
 
             <div className="flex bg-stone-100 rounded-lg p-1">
               <Button
-                variant="ghost"
-                size="icon"
-                className={`h-8 w-8 rounded-lg ${viewMode === 'grid' ? 'bg-white shadow-sm' : ''}`}
-                onClick={() => setViewMode('grid')}
-              >
+                    variant="ghost"
+                    size="icon"
+                    className={`h-8 w-8 rounded-lg ${viewMode === 'grid' ? 'bg-white shadow-sm' : ''}`}
+                    onClick={() => setViewMode('grid')}>
+
                 <Grid3X3 className="h-4 w-4" />
               </Button>
               <Button
-                variant="ghost"
-                size="icon"
-                className={`h-8 w-8 rounded-lg ${viewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
-                onClick={() => setViewMode('list')}
-              >
+                    variant="ghost"
+                    size="icon"
+                    className={`h-8 w-8 rounded-lg ${viewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
+                    onClick={() => setViewMode('list')}>
+
                 <List className="h-4 w-4" />
               </Button>
             </div>
@@ -458,78 +458,78 @@ export default function Dashboard() {
         </div>
 
         {/* Active Filters */}
-        {(selectedCategories.length > 0 || showFavoritesOnly || searchQuery) && (
-          <div className="flex flex-wrap gap-2 mb-6">
-            {selectedCategories.map(cat => (
-              <Badge 
+        {(selectedCategories.length > 0 || showFavoritesOnly || searchQuery) &&
+            <div className="flex flex-wrap gap-2 mb-6">
+            {selectedCategories.map((cat) =>
+              <Badge
                 key={cat}
-                variant="secondary" 
+                variant="secondary"
                 className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
-                onClick={() => setSelectedCategories(prev => prev.filter(c => c !== cat))}
-              >
+                onClick={() => setSelectedCategories((prev) => prev.filter((c) => c !== cat))}>
+
                 {cat} ×
               </Badge>
-            ))}
-            {showFavoritesOnly && (
-              <Badge 
-                variant="secondary" 
+              )}
+            {showFavoritesOnly &&
+              <Badge
+                variant="secondary"
                 className="bg-rose-100 text-rose-700 hover:bg-rose-200 cursor-pointer"
-                onClick={() => setShowFavoritesOnly(false)}
-              >
+                onClick={() => setShowFavoritesOnly(false)}>
+
                 Favorites Only ×
               </Badge>
-            )}
-            {searchQuery && (
-              <Badge 
-                variant="secondary" 
+              }
+            {searchQuery &&
+              <Badge
+                variant="secondary"
                 className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
-                onClick={() => setSearchQuery('')}
-              >
+                onClick={() => setSearchQuery('')}>
+
                 "{searchQuery}" ×
               </Badge>
-            )}
+              }
           </div>
-        )}
+            }
 
         {/* Products Grid/List */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-20">
+        {isLoading ?
+            <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
-          </div>
-        ) : products.length === 0 ? (
-          <EmptyState onAddProduct={() => setShowAddModal(true)} />
-        ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-20">
+          </div> :
+            products.length === 0 ?
+            <EmptyState onAddProduct={() => setShowAddModal(true)} /> :
+            filteredProducts.length === 0 ?
+            <div className="text-center py-20">
             <p className="text-stone-500">No products match your filters</p>
-          </div>
-        ) : (
-          <div className={
-            viewMode === 'grid' 
-              ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-              : "flex flex-col gap-4"
-          }>
+          </div> :
+
+            <div className={
+            viewMode === 'grid' ?
+            "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6" :
+            "flex flex-col gap-4"
+            }>
             <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product) => (
+              {filteredProducts.map((product) =>
                 <ProductCard
                   key={product.id}
                   product={product}
                   onEdit={handleEdit}
                   onDelete={(p) => setDeleteConfirm(p)}
-                  onToggleFavorite={(p) => toggleFavoriteMutation.mutate(p)}
-                />
-              ))}
+                  onToggleFavorite={(p) => toggleFavoriteMutation.mutate(p)} />
+
+                )}
             </AnimatePresence>
           </div>
-          )}
+            }
           </TabsContent>
 
           <TabsContent value="looks" className="mt-8">
-            {looksLoading ? (
-              <div className="flex items-center justify-center py-20">
+            {looksLoading ?
+            <div className="flex items-center justify-center py-20">
                 <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
-              </div>
-            ) : looks.length === 0 ? (
-              <div className="text-center py-20">
+              </div> :
+            looks.length === 0 ?
+            <div className="text-center py-20">
                 <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-rose-100 to-orange-100 flex items-center justify-center mb-6 mx-auto">
                   <Sparkles className="h-10 w-10 text-rose-500" />
                 </div>
@@ -540,35 +540,35 @@ export default function Dashboard() {
                   Create your first "Shop the Look" collection to showcase curated product combinations.
                 </p>
                 <Button
-                  onClick={() => setShowAddLookModal(true)}
-                  className="h-12 px-6 rounded-lg bg-black hover:bg-stone-900 text-white border-0"
-                >
+                onClick={() => setShowAddLookModal(true)}
+                className="h-12 px-6 rounded-lg bg-black hover:bg-stone-900 text-white border-0">
+
                   <Plus className="h-5 w-5 mr-2" />
                   Create Your First Look
                 </Button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              </div> :
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 <AnimatePresence mode="popLayout">
-                  {looks.map((look) => (
-                    <LookCard
-                      key={look.id}
-                      look={look}
-                      products={products}
-                      onEdit={handleEditLook}
-                      onDelete={(l) => setDeleteLookConfirm(l)}
-                      onViewProducts={(l) => setViewingLook(l)}
-                      isAdmin={true}
-                    />
-                  ))}
+                  {looks.map((look) =>
+                <LookCard
+                  key={look.id}
+                  look={look}
+                  products={products}
+                  onEdit={handleEditLook}
+                  onDelete={(l) => setDeleteLookConfirm(l)}
+                  onViewProducts={(l) => setViewingLook(l)}
+                  isAdmin={true} />
+
+                )}
                 </AnimatePresence>
               </div>
-            )}
+            }
           </TabsContent>
 
           <TabsContent value="collections" className="mt-8">
-            {collections.length === 0 ? (
-              <div className="text-center py-20">
+            {collections.length === 0 ?
+            <div className="text-center py-20">
                 <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-rose-100 to-orange-100 flex items-center justify-center mb-6 mx-auto">
                   <FolderOpen className="h-10 w-10 text-rose-500" />
                 </div>
@@ -579,57 +579,57 @@ export default function Dashboard() {
                   Create collections to organize your products into themed groups.
                 </p>
                 <Button
-                  onClick={() => setShowCollectionModal(true)}
-                  className="h-12 px-6 rounded-lg bg-black hover:bg-stone-900 text-white border-0"
-                >
+                onClick={() => setShowCollectionModal(true)}
+                className="h-12 px-6 rounded-lg bg-black hover:bg-stone-900 text-white border-0">
+
                   <Plus className="h-5 w-5 mr-2" />
                   Create Your First Collection
                 </Button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              </div> :
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {collections.map((collection) => {
-                  const collectionProducts = products.filter(p => 
-                    p.collection_ids?.includes(collection.id)
-                  );
-                  return (
-                    <motion.div
-                     key={collection.id}
-                     initial={{ opacity: 0, y: 20 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all group"
-                    >
+                const collectionProducts = products.filter((p) =>
+                p.collection_ids?.includes(collection.id)
+                );
+                return (
+                  <motion.div
+                    key={collection.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all group">
+
                      <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
-                       {collection.image_url ? (
-                         <img src={collection.image_url} alt={collection.name} className="w-full h-full object-cover" />
-                       ) : (
-                         <div className="w-full h-full flex items-center justify-center">
+                       {collection.image_url ?
+                      <img src={collection.image_url} alt={collection.name} className="w-full h-full object-cover" /> :
+
+                      <div className="w-full h-full flex items-center justify-center">
                            <FolderOpen className="h-12 w-12 text-stone-300" />
                          </div>
-                       )}
+                      }
                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                          <DropdownMenu>
                            <DropdownMenuTrigger asChild>
                              <Button
-                               size="icon"
-                               variant="secondary"
-                               className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
-                               onClick={(e) => e.stopPropagation()}
-                             >
+                              size="icon"
+                              variant="secondary"
+                              className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                              onClick={(e) => e.stopPropagation()}>
+
                                <MoreHorizontal className="h-4 w-4 text-stone-600" />
                              </Button>
                            </DropdownMenuTrigger>
                            <DropdownMenuContent align="end" className="w-40">
                              <DropdownMenuItem onClick={() => {
-                               setEditingCollection(collection);
-                               setShowCollectionModal(true);
-                             }}>
+                              setEditingCollection(collection);
+                              setShowCollectionModal(true);
+                            }}>
                                <Pencil className="h-4 w-4 mr-2" /> Edit
                              </DropdownMenuItem>
                              <DropdownMenuItem
-                               onClick={() => setDeleteCollectionConfirm(collection)}
-                               className="text-red-600 focus:text-red-600"
-                             >
+                              onClick={() => setDeleteCollectionConfirm(collection)}
+                              className="text-red-600 focus:text-red-600">
+
                                <Trash2 className="h-4 w-4 mr-2" /> Delete
                              </DropdownMenuItem>
                            </DropdownMenuContent>
@@ -638,18 +638,18 @@ export default function Dashboard() {
                      </div>
                      <div className="p-4">
                        <h3 className="text-lg font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
-                       {collection.description && (
-                         <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
-                       )}
+                       {collection.description &&
+                      <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
+                      }
                        <p className="text-xs text-stone-400">
                          {collectionProducts.length} {collectionProducts.length === 1 ? 'product' : 'products'}
                        </p>
                      </div>
-                    </motion.div>
-                  );
-                })}
+                    </motion.div>);
+
+              })}
               </div>
-            )}
+            }
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-8">
@@ -712,14 +712,14 @@ export default function Dashboard() {
                     <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
                     <XAxis dataKey="date" tick={{ fill: '#78716c', fontSize: 12 }} />
                     <YAxis tick={{ fill: '#78716c', fontSize: 12 }} />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'white',
                         border: '1px solid #e7e5e4',
                         borderRadius: '8px',
                         fontSize: '12px'
-                      }} 
-                    />
+                      }} />
+
                     <Line type="monotone" dataKey="clicks" stroke="#f43f5e" strokeWidth={2} name="Clicks" />
                     <Line type="monotone" dataKey="views" stroke="#f97316" strokeWidth={2} name="Views" />
                   </LineChart>
@@ -738,11 +738,11 @@ export default function Dashboard() {
                       label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                       outerRadius={80}
                       fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {eventDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
+                      dataKey="value">
+
+                      {eventDistribution.map((entry, index) =>
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      )}
                     </Pie>
                     <Tooltip />
                   </PieChart>
@@ -764,22 +764,22 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {topProducts.length === 0 ? (
-                      <tr>
+                    {topProducts.length === 0 ?
+                    <tr>
                         <td colSpan={4} className="text-center py-8 text-stone-500 text-sm">
                           No product data yet. Share your shop link to start tracking!
                         </td>
-                      </tr>
-                    ) : (
-                      topProducts.map((product) => (
-                        <tr key={product.id} className="border-b border-stone-100 hover:bg-stone-50">
+                      </tr> :
+
+                    topProducts.map((product) =>
+                    <tr key={product.id} className="border-b border-stone-100 hover:bg-stone-50">
                           <td className="py-3 px-4 text-sm text-stone-900">{product.name}</td>
                           <td className="py-3 px-4 text-sm text-stone-600 text-right">{product.views}</td>
                           <td className="py-3 px-4 text-sm text-stone-900 text-right font-medium">{product.clicks}</td>
                           <td className="py-3 px-4 text-sm text-green-600 text-right font-medium">{product.conversionRate}%</td>
                         </tr>
-                      ))
-                    )}
+                    )
+                    }
                   </tbody>
                 </table>
               </div>
@@ -796,8 +796,8 @@ export default function Dashboard() {
           queryClient.invalidateQueries({ queryKey: ['products'] });
           handleCloseModal();
         }}
-        editingProduct={editingProduct}
-      />
+        editingProduct={editingProduct} />
+
 
       {/* Add/Edit Look Modal */}
       <AddLookModal
@@ -808,16 +808,16 @@ export default function Dashboard() {
           handleCloseLookModal();
         }}
         editingLook={editingLook}
-        products={products}
-      />
+        products={products} />
+
 
       {/* View Look Modal */}
       <ViewLookModal
         open={!!viewingLook}
         onOpenChange={() => setViewingLook(null)}
         look={viewingLook}
-        products={products}
-      />
+        products={products} />
+
 
       {/* Add/Edit Collection Modal */}
       <AddCollectionModal
@@ -831,8 +831,8 @@ export default function Dashboard() {
           setShowCollectionModal(false);
           setEditingCollection(null);
         }}
-        editingCollection={editingCollection}
-      />
+        editingCollection={editingCollection} />
+
 
       {/* Delete Product Confirmation */}
       <AlertDialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
@@ -847,8 +847,8 @@ export default function Dashboard() {
             <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteMutation.mutate(deleteConfirm.id)}
-              className="rounded-lg bg-red-500 hover:bg-red-600"
-            >
+              className="rounded-lg bg-red-500 hover:bg-red-600">
+
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -868,8 +868,8 @@ export default function Dashboard() {
             <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteLookMutation.mutate(deleteLookConfirm.id)}
-              className="rounded-lg bg-red-500 hover:bg-red-600"
-            >
+              className="rounded-lg bg-red-500 hover:bg-red-600">
+
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -889,13 +889,13 @@ export default function Dashboard() {
             <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteCollectionMutation.mutate(deleteCollectionConfirm.id)}
-              className="rounded-lg bg-red-500 hover:bg-red-600"
-            >
+              className="rounded-lg bg-red-500 hover:bg-red-600">
+
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      </div>
-      );
-      }
+      </div>);
+
+}
