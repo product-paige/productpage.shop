@@ -114,21 +114,6 @@ export default function Shop() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <div className="flex flex-col items-center mb-6">
-            <Avatar className="w-24 h-24 mb-4 border-2 border-stone-200">
-              <AvatarImage 
-                src={currentUser?.avatar_url} 
-                alt={currentUser?.username || 'User'} 
-                className="object-cover"
-              />
-              <AvatarFallback className="bg-gradient-to-br from-rose-500 to-orange-400 text-white text-2xl">
-                {currentUser?.username?.charAt(0).toUpperCase() || 'A'}
-              </AvatarFallback>
-            </Avatar>
-            {currentUser?.username && (
-              <p className="text-sm font-medium text-stone-600 mb-2">@{currentUser.username}</p>
-            )}
-          </div>
           <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-3" style={{ fontFamily: 'Instrument Serif, serif' }}>
             Shop My Favorites
           </h2>
