@@ -317,7 +317,6 @@ export default function Shop() {
                     >
                       <ProductCard
                         product={product}
-                        onToggleFavorite={() => {}}
                         isAdmin={false}
                       />
                     </motion.div>
