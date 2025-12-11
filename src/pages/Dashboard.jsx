@@ -20,7 +20,10 @@ import {
   TrendingUp,
   MousePointerClick,
   Eye,
-  Package
+  Package,
+  MoreHorizontal,
+  Pencil,
+  Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -71,6 +74,7 @@ export default function Dashboard() {
   // Collections state
   const [showCollectionModal, setShowCollectionModal] = useState(false);
   const [editingCollection, setEditingCollection] = useState(null);
+  const [deleteCollectionConfirm, setDeleteCollectionConfirm] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -117,6 +121,15 @@ export default function Dashboard() {
       queryClient.invalidateQueries({ queryKey: ['looks'] });
       toast.success('Look deleted');
       setDeleteLookConfirm(null);
+    },
+  });
+
+  const deleteCollectionMutation = useMutation({
+    mutationFn: (id) => base44.entities.Collection.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['collections'] });
+      toast.success('Collection deleted');
+      setDeleteCollectionConfirm(null);
     },
   });
 
@@ -584,11 +597,7 @@ export default function Dashboard() {
                      key={collection.id}
                      initial={{ opacity: 0, y: 20 }}
                      animate={{ opacity: 1, y: 0 }}
-                     className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
-                     onClick={() => {
-                       setEditingCollection(collection);
-                       setShowCollectionModal(true);
-                     }}
+                     className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all group"
                     >
                      <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
                        {collection.image_url ? (
@@ -598,6 +607,34 @@ export default function Dashboard() {
                            <FolderOpen className="h-12 w-12 text-stone-300" />
                          </div>
                        )}
+                       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                         <DropdownMenu>
+                           <DropdownMenuTrigger asChild>
+                             <Button
+                               size="icon"
+                               variant="secondary"
+                               className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                               onClick={(e) => e.stopPropagation()}
+                             >
+                               <MoreHorizontal className="h-4 w-4 text-stone-600" />
+                             </Button>
+                           </DropdownMenuTrigger>
+                           <DropdownMenuContent align="end" className="w-40">
+                             <DropdownMenuItem onClick={() => {
+                               setEditingCollection(collection);
+                               setShowCollectionModal(true);
+                             }}>
+                               <Pencil className="h-4 w-4 mr-2" /> Edit
+                             </DropdownMenuItem>
+                             <DropdownMenuItem
+                               onClick={() => setDeleteCollectionConfirm(collection)}
+                               className="text-red-600 focus:text-red-600"
+                             >
+                               <Trash2 className="h-4 w-4 mr-2" /> Delete
+                             </DropdownMenuItem>
+                           </DropdownMenuContent>
+                         </DropdownMenu>
+                       </div>
                      </div>
                      <div className="p-4">
                        <h3 className="text-lg font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
@@ -831,6 +868,27 @@ export default function Dashboard() {
             <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteLookMutation.mutate(deleteLookConfirm.id)}
+              className="rounded-lg bg-red-500 hover:bg-red-600"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Collection Confirmation */}
+      <AlertDialog open={!!deleteCollectionConfirm} onOpenChange={() => setDeleteCollectionConfirm(null)}>
+        <AlertDialogContent className="rounded-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Collection</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{deleteCollectionConfirm?.name}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteCollectionMutation.mutate(deleteCollectionConfirm.id)}
               className="rounded-lg bg-red-500 hover:bg-red-600"
             >
               Delete
