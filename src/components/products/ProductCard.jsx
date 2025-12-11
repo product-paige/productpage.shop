@@ -147,7 +147,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
 
         <div className="p-4" onClick={isAdmin && onEdit ? () => onEdit(product) : undefined}>
           <div className="flex items-start justify-between gap-2 mb-1">
-            <h3 className="font-semibold text-stone-900 text-base leading-tight flex-1">
+            <h3 className="font-semibold text-stone-900 text-lg leading-tight flex-1">
               {product.name}
             </h3>
             {product.price && (
