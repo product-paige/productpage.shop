@@ -186,64 +186,36 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
           {/* Image Section */}
           <div className="space-y-3">
             <Label className="text-sm font-medium text-stone-700">Product Image</Label>
-            
+
             {formData.image_url ? (
-              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-stone-100">
-                <img 
-                  src={formData.image_url} 
-                  alt="Product" 
-                  className="w-full h-full object-cover"
-                />
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="secondary"
-                  className="absolute top-2 right-2 h-8 w-8 rounded-full bg-white/90 hover:bg-white"
-                  onClick={() => setFormData(prev => ({ ...prev, image_url: '' }))}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 h-10 bg-stone-100 rounded-lg p-1">
-                  <TabsTrigger value="url" className="rounded-md text-xs font-medium">
-                    <Link className="h-3.5 w-3.5 mr-1.5" /> Image URL
-                  </TabsTrigger>
-                  <TabsTrigger value="upload" className="rounded-md text-xs font-medium">
-                    <Upload className="h-3.5 w-3.5 mr-1.5" /> Upload
-                  </TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="url" className="mt-3">
-                  <Input
-                    placeholder="Paste image URL (e.g., https://example.com/image.jpg)"
-                    value={formData.image_url}
-                    onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </TabsContent>
-                
-                <TabsContent value="upload" className="mt-3">
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-stone-200 rounded-lg cursor-pointer hover:bg-stone-50 transition-colors">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                    {uploadingImage ? (
-                      <Loader2 className="h-8 w-8 text-stone-400 animate-spin" />
-                    ) : (
-                      <>
-                        <ImageIcon className="h-8 w-8 text-stone-400 mb-2" />
-                        <span className="text-sm text-stone-500">Click to upload image</span>
-                      </>
-                    )}
-                  </label>
-                </TabsContent>
-              </Tabs>
+          ...
             )}
+          </div>
+
+          {/* Product URL */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Product Page URL</Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Original product page link..."
+                value={formData.product_url}
+                onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
+                className="h-10 rounded-lg border-stone-200"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={fetchProductInfo}
+                disabled={fetchingImage || !formData.product_url}
+                className="h-10 px-4 rounded-lg border-stone-200 whitespace-nowrap"
+              >
+                {fetchingImage ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  'Auto-fill'
+                )}
+              </Button>
+            </div>
           </div>
 
           {/* Product Name */}
@@ -276,32 +248,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
                 onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
                 className="h-10 rounded-lg border-stone-200 w-24"
               />
-            </div>
-          </div>
-
-          {/* Product URL */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-stone-700">Product Page URL</Label>
-            <div className="flex gap-2">
-              <Input
-                placeholder="Original product page link..."
-                value={formData.product_url}
-                onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
-                className="h-10 rounded-lg border-stone-200"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={fetchProductInfo}
-                disabled={fetchingImage || !formData.product_url}
-                className="h-10 px-4 rounded-lg border-stone-200 whitespace-nowrap"
-              >
-                {fetchingImage ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  'Auto-fill'
-                )}
-              </Button>
             </div>
           </div>
 
