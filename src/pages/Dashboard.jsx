@@ -51,6 +51,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('grid');
   const [filterCategory, setFilterCategory] = useState('all');
+  const [filterSubcategory, setFilterSubcategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   
@@ -107,16 +108,18 @@ export default function Dashboard() {
     },
   });
 
-  // Get unique categories
+  // Get unique categories and subcategories
   const categories = [...new Set(products.filter(p => p.category).map(p => p.category))];
+  const subcategories = [...new Set(products.filter(p => p.subcategory).map(p => p.subcategory))];
 
   // Filter products
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           product.notes?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = filterCategory === 'all' || product.category === filterCategory;
+    const matchesSubcategory = filterSubcategory === 'all' || product.subcategory === filterSubcategory;
     const matchesFavorites = !showFavoritesOnly || product.is_favorite;
-    return matchesSearch && matchesCategory && matchesFavorites;
+    return matchesSearch && matchesCategory && matchesSubcategory && matchesFavorites;
   });
 
   const handleEdit = (product) => {
@@ -261,6 +264,28 @@ export default function Dashboard() {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {subcategories.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="h-10 px-4 rounded-lg border-stone-200">
+                    <SlidersHorizontal className="h-4 w-4 mr-2" />
+                    {filterSubcategory === 'all' ? 'All Subcategories' : filterSubcategory}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => setFilterSubcategory('all')}>
+                    All Subcategories
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {subcategories.map(subcat => (
+                    <DropdownMenuItem key={subcat} onClick={() => setFilterSubcategory(subcat)}>
+                      {subcat}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
             <Button
               variant={showFavoritesOnly ? "default" : "outline"}
               className={`h-10 w-10 rounded-lg border-stone-200 ${showFavoritesOnly ? 'bg-rose-500 hover:bg-rose-600 border-0' : ''}`}
@@ -291,7 +316,7 @@ export default function Dashboard() {
         </div>
 
         {/* Active Filters */}
-        {(filterCategory !== 'all' || showFavoritesOnly || searchQuery) && (
+        {(filterCategory !== 'all' || filterSubcategory !== 'all' || showFavoritesOnly || searchQuery) && (
           <div className="flex flex-wrap gap-2 mb-6">
             {filterCategory !== 'all' && (
               <Badge 
@@ -300,6 +325,15 @@ export default function Dashboard() {
                 onClick={() => setFilterCategory('all')}
               >
                 {filterCategory} ×
+              </Badge>
+            )}
+            {filterSubcategory !== 'all' && (
+              <Badge 
+                variant="secondary" 
+                className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
+                onClick={() => setFilterSubcategory('all')}
+              >
+                {filterSubcategory} ×
               </Badge>
             )}
             {showFavoritesOnly && (
