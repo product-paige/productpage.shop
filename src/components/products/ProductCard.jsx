@@ -99,7 +99,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
           {product.category && (
             <div className="absolute top-3 left-3">
               <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
-                {product.category}
+                {product.subcategory ? `${product.category} > ${product.subcategory}` : product.category}
               </Badge>
             </div>
           )}

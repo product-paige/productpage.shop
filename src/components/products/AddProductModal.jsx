@@ -249,26 +249,37 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             />
           </div>
 
-          {/* Category & Commission */}
+          {/* Category & Subcategory */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label className="text-sm font-medium text-stone-700">Category</Label>
               <Input
-                placeholder="e.g., Fashion"
+                placeholder="e.g., Beauty"
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                 className="h-10 rounded-lg border-stone-200"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-stone-700">Commission</Label>
+              <Label className="text-sm font-medium text-stone-700">Subcategory</Label>
               <Input
-                placeholder="e.g., 15%"
-                value={formData.commission_rate}
-                onChange={(e) => setFormData(prev => ({ ...prev, commission_rate: e.target.value }))}
+                placeholder="e.g., Skincare"
+                value={formData.subcategory}
+                onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
                 className="h-10 rounded-lg border-stone-200"
               />
             </div>
+          </div>
+
+          {/* Commission */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Commission</Label>
+            <Input
+              placeholder="e.g., 15%"
+              value={formData.commission_rate}
+              onChange={(e) => setFormData(prev => ({ ...prev, commission_rate: e.target.value }))}
+              className="h-10 rounded-lg border-stone-200"
+            />
           </div>
 
           {/* Notes */}

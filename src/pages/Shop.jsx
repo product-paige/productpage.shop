@@ -50,12 +50,13 @@ export default function Shop() {
     queryFn: () => base44.entities.Look.list('-created_date'),
   });
 
-  // Get unique categories
+  // Get unique categories and subcategories
   const categories = [...new Set(products.filter(p => p.category).map(p => p.category))];
-
+  const subcategories = [...new Set(products.filter(p => p.subcategory).map(p => p.subcategory))];
+  
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || product.category === filterCategory;
+    const matchesCategory = filterCategory === 'all' || product.category === filterCategory || product.subcategory === filterCategory;
     const matchesFavorites = !showFavoritesOnly || product.is_favorite;
     return matchesSearch && matchesCategory && matchesFavorites;
   });
@@ -124,16 +125,34 @@ export default function Shop() {
                       {filterCategory === 'all' ? 'All Categories' : filterCategory}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuContent align="end" className="w-56 max-h-80 overflow-y-auto">
                     <DropdownMenuItem onClick={() => setFilterCategory('all')}>
                       All Categories
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    {categories.map(cat => (
-                      <DropdownMenuItem key={cat} onClick={() => setFilterCategory(cat)}>
-                        {cat}
-                      </DropdownMenuItem>
-                    ))}
+                    {categories.map(cat => {
+                      const catSubcategories = products
+                        .filter(p => p.category === cat && p.subcategory)
+                        .map(p => p.subcategory);
+                      const uniqueSubs = [...new Set(catSubcategories)];
+                      
+                      return (
+                        <div key={cat}>
+                          <DropdownMenuItem onClick={() => setFilterCategory(cat)}>
+                            <span className="font-medium">{cat}</span>
+                          </DropdownMenuItem>
+                          {uniqueSubs.map(sub => (
+                            <DropdownMenuItem 
+                              key={`${cat}-${sub}`} 
+                              onClick={() => setFilterCategory(sub)}
+                              className="pl-6 text-sm"
+                            >
+                              {sub}
+                            </DropdownMenuItem>
+                          ))}
+                        </div>
+                      );
+                    })}
                   </DropdownMenuContent>
                 </DropdownMenu>
 
