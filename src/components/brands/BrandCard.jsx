@@ -20,7 +20,7 @@ export default function BrandCard({ brand }) {
         <div className="p-6">
           {/* Logo and Header */}
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-16 h-16 rounded-lg bg-stone-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-16 h-16 rounded-lg bg-stone-100 flex items-center justify-center overflow-hidden flex-shrink-0 border border-stone-700">
               {brand.logo_url ?
               <img
                 src={brand.logo_url}
@@ -36,11 +36,11 @@ export default function BrandCard({ brand }) {
             </div>
 
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-stone-900 text-lg leading-tight mb-2">
+              <h3 className="font-semibold text-stone-900 text-xl leading-tight mb-2">
                 {brand.name}
               </h3>
               {brand.category &&
-              <Badge className="bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs">
+              <Badge className="bg-black text-white hover:bg-stone-900 text-xs shadow-none">
                   {brand.category}
                 </Badge>
               }
@@ -82,7 +82,8 @@ export default function BrandCard({ brand }) {
 
           {/* Apply Button */}
           <Button
-            className="w-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 rounded-lg h-10"
+            variant="outline"
+            className="w-full bg-white hover:bg-stone-50 text-stone-700 border-stone-300 rounded-lg h-10"
             onClick={() => window.open(brand.program_url, '_blank')}>
 
             <ExternalLink className="h-4 w-4 mr-2" />
