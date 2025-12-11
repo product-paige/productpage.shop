@@ -244,12 +244,27 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
           {/* Product URL */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-stone-700">Product Page URL</Label>
-            <Input
-              placeholder="Original product page link..."
-              value={formData.product_url}
-              onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
-              className="h-10 rounded-lg border-stone-200"
-            />
+            <div className="flex gap-2">
+              <Input
+                placeholder="Original product page link..."
+                value={formData.product_url}
+                onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
+                className="h-10 rounded-lg border-stone-200"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={fetchProductInfo}
+                disabled={fetchingImage || !formData.product_url}
+                className="h-10 px-4 rounded-lg border-stone-200 whitespace-nowrap"
+              >
+                {fetchingImage ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  'Auto-fill'
+                )}
+              </Button>
+            </div>
           </div>
 
           {/* Affiliate Link */}
