@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Search, Loader2, Sparkles, Heart, SlidersHorizontal, FolderOpen } from 'lucide-react';
+import { Search, Loader2, Sparkles, Heart, SlidersHorizontal, FolderOpen, Instagram, MessageCircle, Youtube } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -96,6 +96,39 @@ export default function Shop() {
                 </div>
               }
               <h1 className="text-lg font-semibold text-stone-900">@{user?.username || 'Affiliate Hub'}</h1>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {user?.social_links?.instagram && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 rounded-full"
+                  onClick={() => window.open(user.social_links.instagram, '_blank')}
+                >
+                  <Instagram className="h-5 w-5 text-stone-600" />
+                </Button>
+              )}
+              {user?.social_links?.tiktok && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 rounded-full"
+                  onClick={() => window.open(user.social_links.tiktok, '_blank')}
+                >
+                  <MessageCircle className="h-5 w-5 text-stone-600" />
+                </Button>
+              )}
+              {user?.social_links?.youtube && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 rounded-full"
+                  onClick={() => window.open(user.social_links.youtube, '_blank')}
+                >
+                  <Youtube className="h-5 w-5 text-stone-600" />
+                </Button>
+              )}
             </div>
           </div>
         </div>

@@ -274,6 +274,12 @@ export default function Dashboard() {
 
             <div className="flex items-center gap-3">
               <Button
+                onClick={() => window.location.href = '/shop'}
+                variant="outline"
+                className="h-9 px-4 rounded-full">
+                View Shop
+              </Button>
+              <Button
                 onClick={() => window.location.href = '/settings'}
                 variant="outline"
                 className="h-9 px-4 rounded-full">
