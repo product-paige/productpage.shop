@@ -40,17 +40,72 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                 className="w-24 h-24 rounded-lg object-cover"
               />
               <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <h4 className="font-semibold text-stone-900">{product.name}</h4>
-                  {product.price && (
-                    <span className="font-semibold text-stone-900 whitespace-nowrap">{product.price}</span>
-                  )}
-                </div>
+                <h4 className="font-semibold text-stone-900 mb-2">{product.name}</h4>
                 {product.notes && (
                   <p className="text-sm text-stone-600 mb-3">{product.notes}</p>
                 )}
-                <div className="flex gap-2">
-                  {product.affiliate_link && (
+                <div className="flex flex-wrap gap-2">
+                  {product.affiliate_links?.US && (
+                    <>
+                      <Button
+                        size="sm"
+                        className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
+                        onClick={() => copyAffiliateLink(product.affiliate_links.US)}
+                      >
+                        <Copy className="h-3 w-3 mr-1" />
+                        🇺🇸 Copy
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-3 rounded-full text-xs"
+                        onClick={() => window.open(product.affiliate_links.US, '_blank')}
+                      >
+                        🇺🇸 Shop
+                      </Button>
+                    </>
+                  )}
+                  {product.affiliate_links?.CA && (
+                    <>
+                      <Button
+                        size="sm"
+                        className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
+                        onClick={() => copyAffiliateLink(product.affiliate_links.CA)}
+                      >
+                        <Copy className="h-3 w-3 mr-1" />
+                        🇨🇦 Copy
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-3 rounded-full text-xs"
+                        onClick={() => window.open(product.affiliate_links.CA, '_blank')}
+                      >
+                        🇨🇦 Shop
+                      </Button>
+                    </>
+                  )}
+                  {product.affiliate_links?.UK && (
+                    <>
+                      <Button
+                        size="sm"
+                        className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
+                        onClick={() => copyAffiliateLink(product.affiliate_links.UK)}
+                      >
+                        <Copy className="h-3 w-3 mr-1" />
+                        🇬🇧 Copy
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-3 rounded-full text-xs"
+                        onClick={() => window.open(product.affiliate_links.UK, '_blank')}
+                      >
+                        🇬🇧 Shop
+                      </Button>
+                    </>
+                  )}
+                  {product.affiliate_link && !product.affiliate_links && (
                     <>
                       <Button
                         size="sm"
