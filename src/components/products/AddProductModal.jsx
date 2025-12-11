@@ -32,7 +32,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     name: '',
     price: '',
     product_url: '',
-    affiliate_link: '',
+    affiliate_links: { US: '', CA: '', UK: '' },
     image_url: '',
     notes: '',
     category: '',
@@ -40,7 +40,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     commission_rate: '',
     collection_ids: [],
     is_ad: false,
-    available_regions: ['US', 'CA', 'UK'],
   });
 
   React.useEffect(() => {
@@ -51,7 +50,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         name: '',
         price: '',
         product_url: '',
-        affiliate_link: '',
+        affiliate_links: { US: '', CA: '', UK: '' },
         image_url: '',
         notes: '',
         category: '',
@@ -59,7 +58,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         commission_rate: '',
         collection_ids: [],
         is_ad: false,
-        available_regions: ['US', 'CA', 'UK'],
       });
     }
   }, [editingProduct, open]);
@@ -269,15 +267,47 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             </div>
           </div>
 
-          {/* Affiliate Link */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-stone-700">Affiliate Link</Label>
-            <Input
-              placeholder="Your affiliate URL..."
-              value={formData.affiliate_link}
-              onChange={(e) => setFormData(prev => ({ ...prev, affiliate_link: e.target.value }))}
-              className="h-10 rounded-lg border-stone-200"
-            />
+          {/* Affiliate Links by Region */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium text-stone-700">Affiliate Links by Region</Label>
+            <div className="space-y-2">
+              <div className="space-y-1.5">
+                <Label className="text-xs text-stone-500 font-normal">🇺🇸 United States</Label>
+                <Input
+                  placeholder="US affiliate link..."
+                  value={formData.affiliate_links?.US || ''}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    affiliate_links: { ...(prev.affiliate_links || {}), US: e.target.value }
+                  }))}
+                  className="h-10 rounded-lg border-stone-200"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs text-stone-500 font-normal">🇨🇦 Canada</Label>
+                <Input
+                  placeholder="Canada affiliate link..."
+                  value={formData.affiliate_links?.CA || ''}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    affiliate_links: { ...(prev.affiliate_links || {}), CA: e.target.value }
+                  }))}
+                  className="h-10 rounded-lg border-stone-200"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs text-stone-500 font-normal">🇬🇧 United Kingdom</Label>
+                <Input
+                  placeholder="UK affiliate link..."
+                  value={formData.affiliate_links?.UK || ''}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    affiliate_links: { ...(prev.affiliate_links || {}), UK: e.target.value }
+                  }))}
+                  className="h-10 rounded-lg border-stone-200"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Category & Subcategory */}
@@ -348,31 +378,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
               </div>
             </div>
           )}
-
-          {/* Available Regions */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-stone-700">Available Regions</Label>
-            <div className="border border-stone-200 rounded-lg p-3 space-y-2">
-              {['US', 'CA', 'UK'].map(region => (
-                <div key={region} className="flex items-center gap-2">
-                  <Checkbox
-                    checked={formData.available_regions?.includes(region)}
-                    onCheckedChange={(checked) => {
-                      setFormData(prev => ({
-                        ...prev,
-                        available_regions: checked
-                          ? [...(prev.available_regions || []), region]
-                          : (prev.available_regions || []).filter(r => r !== region)
-                      }));
-                    }}
-                  />
-                  <span className="text-sm text-stone-700">
-                    {region === 'US' ? '🇺🇸 United States' : region === 'CA' ? '🇨🇦 Canada' : '🇬🇧 United Kingdom'}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* Ad Toggle */}
           <div className="flex items-center gap-2 p-3 bg-stone-50 rounded-lg">

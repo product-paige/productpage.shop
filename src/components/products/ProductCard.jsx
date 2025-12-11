@@ -14,12 +14,29 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite, isAdmin = true }) {
+  // Get any available affiliate link
+  const getAffiliateLink = () => {
+    if (product.affiliate_links) {
+      return product.affiliate_links.US || product.affiliate_links.CA || product.affiliate_links.UK;
+    }
+    return product.affiliate_link; // backwards compatibility
+  };
+
+  const hasMultipleRegions = product.affiliate_links && 
+    Object.values(product.affiliate_links).filter(link => link).length > 1;
+
+  const availableRegions = product.affiliate_links ? 
+    Object.entries(product.affiliate_links)
+      .filter(([_, link]) => link)
+      .map(([region, _]) => region) : [];
+
   const copyAffiliateLink = async (e) => {
     e.stopPropagation();
-    if (product.affiliate_link) {
-      navigator.clipboard.writeText(product.affiliate_link);
+    const link = getAffiliateLink();
+    if (link) {
+      navigator.clipboard.writeText(link);
       toast.success('Affiliate link copied!');
-      
+
       // Track affiliate click
       if (!isAdmin) {
         try {
@@ -102,9 +119,9 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 Ad
               </Badge>
             )}
-            {product.available_regions && product.available_regions.length < 3 && (
+            {hasMultipleRegions && availableRegions.length < 3 && (
               <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
-                {product.available_regions.map(r => r === 'US' ? '🇺🇸' : r === 'CA' ? '🇨🇦' : '🇬🇧').join(' ')}
+                {availableRegions.map(r => r === 'US' ? '🇺🇸' : r === 'CA' ? '🇨🇦' : '🇬🇧').join(' ')}
               </Badge>
             )}
             {product.category && (
@@ -116,7 +133,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
 
           {/* Bottom actions */}
           <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {product.affiliate_link && (
+            {getAffiliateLink() && (
               <Button
                 size="sm"
                 className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
@@ -126,7 +143,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 Copy Link
               </Button>
             )}
-            {product.affiliate_link && (
+            {getAffiliateLink() && (
               <Button
                 size="icon"
                 variant="secondary"
@@ -146,7 +163,7 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                     }
                   }
 
-                  window.open(product.affiliate_link, '_blank');
+                  window.open(getAffiliateLink(), '_blank');
                 }}
               >
                 <ExternalLink className="h-4 w-4 text-stone-600" />
