@@ -36,7 +36,10 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     image_url: '',
     notes: '',
     category: '',
+    subcategory: '',
     commission_rate: '',
+    collection_ids: [],
+    is_ad: false,
   });
 
   React.useEffect(() => {
@@ -51,7 +54,10 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         image_url: '',
         notes: '',
         category: '',
+        subcategory: '',
         commission_rate: '',
+        collection_ids: [],
+        is_ad: false,
       });
     }
   }, [editingProduct, open]);
