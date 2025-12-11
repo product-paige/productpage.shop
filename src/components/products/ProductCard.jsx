@@ -102,6 +102,11 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 Ad
               </Badge>
             )}
+            {product.available_regions && product.available_regions.length < 3 && (
+              <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
+                {product.available_regions.map(r => r === 'US' ? '🇺🇸' : r === 'CA' ? '🇨🇦' : '🇬🇧').join(' ')}
+              </Badge>
+            )}
             {product.category && (
               <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
                 {product.subcategory ? `${product.category} > ${product.subcategory}` : product.category}

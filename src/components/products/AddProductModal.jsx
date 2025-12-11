@@ -40,6 +40,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     commission_rate: '',
     collection_ids: [],
     is_ad: false,
+    available_regions: ['US', 'CA', 'UK'],
   });
 
   React.useEffect(() => {
@@ -58,6 +59,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         commission_rate: '',
         collection_ids: [],
         is_ad: false,
+        available_regions: ['US', 'CA', 'UK'],
       });
     }
   }, [editingProduct, open]);
@@ -346,6 +348,31 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
               </div>
             </div>
           )}
+
+          {/* Available Regions */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Available Regions</Label>
+            <div className="border border-stone-200 rounded-lg p-3 space-y-2">
+              {['US', 'CA', 'UK'].map(region => (
+                <div key={region} className="flex items-center gap-2">
+                  <Checkbox
+                    checked={formData.available_regions?.includes(region)}
+                    onCheckedChange={(checked) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        available_regions: checked
+                          ? [...(prev.available_regions || []), region]
+                          : (prev.available_regions || []).filter(r => r !== region)
+                      }));
+                    }}
+                  />
+                  <span className="text-sm text-stone-700">
+                    {region === 'US' ? '🇺🇸 United States' : region === 'CA' ? '🇨🇦 Canada' : '🇬🇧 United Kingdom'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Ad Toggle */}
           <div className="flex items-center gap-2 p-3 bg-stone-50 rounded-lg">
