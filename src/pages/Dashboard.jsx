@@ -23,7 +23,8 @@ import {
   Package,
   MoreHorizontal,
   Pencil,
-  Trash2 } from
+  Trash2,
+  Pin } from
 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -115,6 +116,19 @@ export default function Dashboard() {
     }
   });
 
+  const togglePinMutation = useMutation({
+    mutationFn: ({ type, item }) => {
+      if (type === 'product') return base44.entities.Product.update(item.id, { is_pinned: !item.is_pinned });
+      if (type === 'look') return base44.entities.Look.update(item.id, { is_pinned: !item.is_pinned });
+      if (type === 'collection') return base44.entities.Collection.update(item.id, { is_pinned: !item.is_pinned });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['looks'] });
+      queryClient.invalidateQueries({ queryKey: ['collections'] });
+    }
+  });
+
   const deleteLookMutation = useMutation({
     mutationFn: (id) => base44.entities.Look.delete(id),
     onSuccess: () => {
@@ -141,15 +155,35 @@ export default function Dashboard() {
   )].
   sort();
 
-  // Filter products
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.notes?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategories.length === 0 ||
-    selectedCategories.includes(product.category) ||
-    selectedCategories.includes(product.subcategory);
-    const matchesFavorites = !showFavoritesOnly || product.is_favorite;
-    return matchesSearch && matchesCategory && matchesFavorites;
+  // Filter and sort products
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.notes?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategories.length === 0 ||
+      selectedCategories.includes(product.category) ||
+      selectedCategories.includes(product.subcategory);
+      const matchesFavorites = !showFavoritesOnly || product.is_favorite;
+      return matchesSearch && matchesCategory && matchesFavorites;
+    })
+    .sort((a, b) => {
+      if (a.is_pinned && !b.is_pinned) return -1;
+      if (!a.is_pinned && b.is_pinned) return 1;
+      return 0;
+    });
+
+  // Sort looks by pinned status
+  const sortedLooks = [...looks].sort((a, b) => {
+    if (a.is_pinned && !b.is_pinned) return -1;
+    if (!a.is_pinned && b.is_pinned) return 1;
+    return 0;
+  });
+
+  // Sort collections by pinned status
+  const sortedCollections = [...collections].sort((a, b) => {
+    if (a.is_pinned && !b.is_pinned) return -1;
+    if (!a.is_pinned && b.is_pinned) return 1;
+    return 0;
   });
 
   const handleEdit = (product) => {
@@ -521,7 +555,8 @@ export default function Dashboard() {
                   product={product}
                   onEdit={handleEdit}
                   onDelete={(p) => setDeleteConfirm(p)}
-                  onToggleFavorite={(p) => toggleFavoriteMutation.mutate(p)} />
+                  onToggleFavorite={(p) => toggleFavoriteMutation.mutate(p)}
+                  onTogglePin={(p) => togglePinMutation.mutate({ type: 'product', item: p })} />
 
                 )}
             </AnimatePresence>
@@ -556,7 +591,7 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 <AnimatePresence mode="popLayout">
-                  {looks.map((look) =>
+                  {sortedLooks.map((look) =>
                 <LookCard
                   key={look.id}
                   look={look}
@@ -564,6 +599,7 @@ export default function Dashboard() {
                   onEdit={handleEditLook}
                   onDelete={(l) => setDeleteLookConfirm(l)}
                   onViewProducts={(l) => setViewingLook(l)}
+                  onTogglePin={(l) => togglePinMutation.mutate({ type: 'look', item: l })}
                   isAdmin={true} />
 
                 )}
@@ -594,7 +630,7 @@ export default function Dashboard() {
               </div> :
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {collections.map((collection) => {
+                {sortedCollections.map((collection) => {
                 const collectionProducts = products.filter((p) =>
                 p.collection_ids?.includes(collection.id)
                 );
@@ -613,7 +649,18 @@ export default function Dashboard() {
                            <FolderOpen className="h-12 w-12 text-stone-300" />
                          </div>
                       }
-                       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                       <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                         <Button
+                           size="icon"
+                           variant="secondary"
+                           className={`h-8 w-8 rounded-full shadow-lg ${collection.is_pinned ? 'bg-rose-500 hover:bg-rose-600' : 'bg-white/90 hover:bg-white'}`}
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             togglePinMutation.mutate({ type: 'collection', item: collection });
+                           }}
+                         >
+                           <Pin className={`h-4 w-4 ${collection.is_pinned ? 'text-white' : 'text-stone-600'}`} />
+                         </Button>
                          <DropdownMenu>
                            <DropdownMenuTrigger asChild>
                              <Button
