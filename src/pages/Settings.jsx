@@ -27,6 +27,8 @@ export default function Settings() {
     bio: user?.bio || '',
     avatar_url: user?.avatar_url || '',
     social_links: user?.social_links || { instagram: '', tiktok: '', youtube: '' },
+    shop_title: user?.shop_title || '',
+    shop_description: user?.shop_description || '',
   });
 
   React.useEffect(() => {
@@ -36,6 +38,8 @@ export default function Settings() {
         bio: user.bio || '',
         avatar_url: user.avatar_url || '',
         social_links: user.social_links || { instagram: '', tiktok: '', youtube: '' },
+        shop_title: user.shop_title || '',
+        shop_description: user.shop_description || '',
       });
     }
   }, [user]);
@@ -226,6 +230,28 @@ export default function Settings() {
                 placeholder="Tell your audience about yourself..."
                 value={formData.bio}
                 onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                className="h-10 rounded-lg border-stone-200"
+              />
+            </div>
+
+            {/* Shop Title */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-stone-700">Shop Page Title</Label>
+              <Input
+                placeholder="Shop my favorite products"
+                value={formData.shop_title}
+                onChange={(e) => setFormData(prev => ({ ...prev, shop_title: e.target.value }))}
+                className="h-10 rounded-lg border-stone-200"
+              />
+            </div>
+
+            {/* Shop Description */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-stone-700">Shop Page Description</Label>
+              <Input
+                placeholder="Discover my curated collection of products and styled looks."
+                value={formData.shop_description}
+                onChange={(e) => setFormData(prev => ({ ...prev, shop_description: e.target.value }))}
                 className="h-10 rounded-lg border-stone-200"
               />
             </div>

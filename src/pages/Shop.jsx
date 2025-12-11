@@ -104,11 +104,11 @@ export default function Shop() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-3" style={{ fontFamily: 'Instrument Serif, serif' }}>Shop my favorite products
-
+          <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-3" style={{ fontFamily: 'Instrument Serif, serif' }}>
+            {user?.shop_title || 'Shop my favorite products'}
           </h2>
-          <p className="text-stone-600 max-w-2xl mx-auto">Discover my curated collection of products and styled looks.
-
+          <p className="text-stone-600 max-w-2xl mx-auto">
+            {user?.shop_description || 'Discover my curated collection of products and styled looks.'}
           </p>
         </div>
 
