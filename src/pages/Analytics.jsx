@@ -135,6 +135,14 @@ export default function Analytics() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Info Banner */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+          <p className="text-sm text-blue-900">
+            <strong>Public Shop Analytics:</strong> This dashboard tracks visitor interactions from your public shop page. 
+            Your own activity in the Dashboard is not tracked here.
+          </p>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Card className="p-6 border-0 shadow-sm">
