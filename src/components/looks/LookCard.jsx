@@ -23,7 +23,7 @@ export default function LookCard({ look, products, onEdit, onDelete, onViewProdu
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}>
 
-      <Card className="group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 bg-white">
+      <Card className="group overflow-hidden border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-300 bg-white rounded-lg">
         <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-stone-100 to-stone-50">
           <img
             src={look.image_url || placeholderImage}

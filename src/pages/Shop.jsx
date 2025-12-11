@@ -276,6 +276,7 @@ export default function Shop() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all group cursor-pointer"
+                      style={{ borderRadius: '8px' }}
                       onClick={() => setViewingCollection(collection)}>
 
                         <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
