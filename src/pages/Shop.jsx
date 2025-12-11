@@ -28,11 +28,6 @@ export default function Shop() {
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
-  const { data: user } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: () => base44.auth.me(),
-  });
-
   // Track analytics
   const trackEvent = async (eventType, productId = null, lookId = null) => {
     try {
@@ -88,14 +83,10 @@ export default function Shop() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              {user?.avatar_url ? (
-                <img src={user.avatar_url} alt={user.username} className="w-9 h-9 rounded-full object-cover" />
-              ) : (
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">{user?.username?.[0] || 'A'}</span>
-                </div>
-              )}
-              <h1 className="text-lg font-semibold text-stone-900">@{user?.username || 'Affiliate Hub'}</h1>
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
+              </div>
+              <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
             </div>
           </div>
         </div>
