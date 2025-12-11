@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,19 +27,6 @@ export default function Shop() {
   const [viewingCollection, setViewingCollection] = useState(null);
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await base44.auth.me();
-        setCurrentUser(user);
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-      }
-    };
-    fetchUser();
-  }, []);
 
   // Track analytics
   const trackEvent = async (eventType, productId = null, lookId = null) => {
@@ -97,15 +83,10 @@ export default function Shop() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Avatar className="w-9 h-9 border border-stone-200">
-                <AvatarImage src={currentUser?.avatar_url} alt={currentUser?.username || 'User'} className="object-cover" />
-                <AvatarFallback className="bg-gradient-to-br from-rose-500 to-orange-400 text-white text-sm font-bold">
-                  {currentUser?.username?.charAt(0).toUpperCase() || 'A'}
-                </AvatarFallback>
-              </Avatar>
-              <h1 className="text-lg font-semibold text-stone-900">
-                {currentUser?.username ? `@${currentUser.username}` : 'Affiliate Hub'}
-              </h1>
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
+              </div>
+              <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
             </div>
           </div>
         </div>
@@ -298,7 +279,7 @@ export default function Shop() {
                           )}
                         </div>
                         <div className="p-4">
-                          <h3 className="text-xl font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
+                          <h3 className="text-lg font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
                           {collection.description && (
                             <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
                           )}
@@ -336,6 +317,7 @@ export default function Shop() {
                     >
                       <ProductCard
                         product={product}
+                        onToggleFavorite={() => {}}
                         isAdmin={false}
                       />
                     </motion.div>
