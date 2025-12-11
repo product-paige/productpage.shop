@@ -56,11 +56,11 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
           )}
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 mt-4">
           {/* Left: Video or Image */}
           <div className="space-y-4">
             {showVideo ? (
-              <div className="relative w-full aspect-[9/16] bg-stone-100 rounded-lg overflow-hidden">
+              <div className="relative w-full max-w-[300px] aspect-[9/16] bg-stone-100 rounded-lg overflow-hidden">
                 <iframe
                   src={embedUrl}
                   className="w-full h-full"
@@ -71,7 +71,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                 />
               </div>
             ) : look.image_url ? (
-              <div className="relative w-full aspect-[9/16] bg-stone-100 rounded-lg overflow-hidden">
+              <div className="relative w-full max-w-[300px] aspect-[9/16] bg-stone-100 rounded-lg overflow-hidden">
                 <img
                   src={look.image_url}
                   alt={look.name}
@@ -79,7 +79,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                 />
               </div>
             ) : (
-              <div className="w-full aspect-[9/16] bg-stone-100 rounded-lg flex items-center justify-center">
+              <div className="w-full max-w-[300px] aspect-[9/16] bg-stone-100 rounded-lg flex items-center justify-center">
                 <p className="text-stone-400">No media available</p>
               </div>
             )}
