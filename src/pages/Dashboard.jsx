@@ -13,7 +13,8 @@ import {
   Heart,
   Loader2,
   SlidersHorizontal,
-  Sparkles
+  Sparkles,
+  FolderOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -41,6 +42,7 @@ import EmptyState from '@/components/products/EmptyState';
 import LookCard from '@/components/looks/LookCard';
 import AddLookModal from '@/components/looks/AddLookModal';
 import ViewLookModal from '@/components/looks/ViewLookModal';
+import AddCollectionModal from '@/components/collections/AddCollectionModal';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('products');
@@ -58,6 +60,10 @@ export default function Dashboard() {
   const [viewingLook, setViewingLook] = useState(null);
   const [deleteLookConfirm, setDeleteLookConfirm] = useState(null);
 
+  // Collections state
+  const [showCollectionModal, setShowCollectionModal] = useState(false);
+  const [editingCollection, setEditingCollection] = useState(null);
+
   const queryClient = useQueryClient();
 
   const { data: products = [], isLoading } = useQuery({
@@ -68,6 +74,11 @@ export default function Dashboard() {
   const { data: looks = [], isLoading: looksLoading } = useQuery({
     queryKey: ['looks'],
     queryFn: () => base44.entities.Look.list('-created_date'),
+  });
+
+  const { data: collections = [] } = useQuery({
+    queryKey: ['collections'],
+    queryFn: () => base44.entities.Collection.list('-created_date'),
   });
 
   const deleteMutation = useMutation({
@@ -142,11 +153,15 @@ export default function Dashboard() {
             </div>
             
             <Button
-              onClick={() => activeTab === 'products' ? setShowAddModal(true) : setShowAddLookModal(true)}
+              onClick={() => {
+                if (activeTab === 'products') setShowAddModal(true);
+                else if (activeTab === 'looks') setShowAddLookModal(true);
+                else setShowCollectionModal(true);
+              }}
               className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm"
             >
               <Plus className="h-4 w-4 mr-1.5" />
-              {activeTab === 'products' ? 'Add Product' : 'Add Look'}
+              {activeTab === 'products' ? 'Add Product' : activeTab === 'looks' ? 'Add Look' : 'Add Collection'}
             </Button>
           </div>
         </div>
@@ -155,13 +170,17 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-          <TabsList className="grid w-full max-w-md grid-cols-2 h-11 bg-stone-100 rounded-lg p-1">
+          <TabsList className="grid w-full max-w-2xl grid-cols-3 h-11 bg-stone-100 rounded-lg p-1">
             <TabsTrigger value="products" className="rounded-lg text-sm font-medium">
               All products
             </TabsTrigger>
             <TabsTrigger value="looks" className="rounded-lg text-sm font-medium">
               <Sparkles className="h-4 w-4 mr-1.5" />
               Shop my style
+            </TabsTrigger>
+            <TabsTrigger value="collections" className="rounded-lg text-sm font-medium">
+              <FolderOpen className="h-4 w-4 mr-1.5" />
+              Collections
             </TabsTrigger>
           </TabsList>
 
@@ -378,6 +397,64 @@ export default function Dashboard() {
               </div>
             )}
           </TabsContent>
+
+          <TabsContent value="collections" className="mt-8">
+            {collections.length === 0 ? (
+              <div className="text-center py-20">
+                <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-rose-100 to-orange-100 flex items-center justify-center mb-6 mx-auto">
+                  <FolderOpen className="h-10 w-10 text-rose-500" />
+                </div>
+                <h3 className="text-xl font-semibold text-stone-900 mb-2">
+                  No collections yet
+                </h3>
+                <p className="text-stone-500 text-center max-w-sm mb-8 mx-auto">
+                  Create collections to organize your products into themed groups.
+                </p>
+                <Button
+                  onClick={() => setShowCollectionModal(true)}
+                  className="h-12 px-6 rounded-lg bg-black hover:bg-stone-900 text-white border-0"
+                >
+                  <Plus className="h-5 w-5 mr-2" />
+                  Create Your First Collection
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {collections.map((collection) => {
+                  const collectionProducts = products.filter(p => 
+                    p.collection_ids?.includes(collection.id)
+                  );
+                  return (
+                    <motion.div
+                      key={collection.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all"
+                    >
+                      <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
+                        {collection.image_url ? (
+                          <img src={collection.image_url} alt={collection.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <FolderOpen className="h-12 w-12 text-stone-300" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-stone-900 mb-1">{collection.name}</h3>
+                        {collection.description && (
+                          <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
+                        )}
+                        <p className="text-xs text-stone-400">
+                          {collectionProducts.length} {collectionProducts.length === 1 ? 'product' : 'products'}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+          </TabsContent>
           </Tabs>
           </main>
 
@@ -410,6 +487,21 @@ export default function Dashboard() {
         onOpenChange={() => setViewingLook(null)}
         look={viewingLook}
         products={products}
+      />
+
+      {/* Add/Edit Collection Modal */}
+      <AddCollectionModal
+        open={showCollectionModal}
+        onOpenChange={() => {
+          setShowCollectionModal(false);
+          setEditingCollection(null);
+        }}
+        onCollectionAdded={() => {
+          queryClient.invalidateQueries({ queryKey: ['collections'] });
+          setShowCollectionModal(false);
+          setEditingCollection(null);
+        }}
+        editingCollection={editingCollection}
       />
 
       {/* Delete Product Confirmation */}
