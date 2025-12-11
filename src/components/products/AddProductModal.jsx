@@ -10,15 +10,22 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link, Upload, Loader2, ImageIcon, X } from 'lucide-react';
+import { Checkbox } from "@/components/ui/checkbox";
+import { Link, Upload, Loader2, ImageIcon, X, Tag } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function AddProductModal({ open, onOpenChange, onProductAdded, editingProduct }) {
   const [activeTab, setActiveTab] = useState('url');
   const [loading, setLoading] = useState(false);
   const [fetchingImage, setFetchingImage] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+
+  const { data: collections = [] } = base44.useQuery({
+    queryKey: ['collections'],
+    queryFn: () => base44.entities.Collection.list(),
+  });
   
   const [formData, setFormData] = useState(editingProduct || {
     name: '',
@@ -291,6 +298,45 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               className="min-h-[100px] rounded-lg border-stone-200 resize-none"
             />
+          </div>
+
+          {/* Collections */}
+          {collections.length > 0 && (
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-stone-700">Collections</Label>
+              <div className="border border-stone-200 rounded-lg p-3 space-y-2 max-h-40 overflow-y-auto">
+                {collections.map(collection => (
+                  <div key={collection.id} className="flex items-center gap-2">
+                    <Checkbox
+                      checked={formData.collection_ids?.includes(collection.id)}
+                      onCheckedChange={(checked) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          collection_ids: checked
+                            ? [...(prev.collection_ids || []), collection.id]
+                            : (prev.collection_ids || []).filter(id => id !== collection.id)
+                        }));
+                      }}
+                    />
+                    <span className="text-sm text-stone-700">{collection.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Ad Toggle */}
+          <div className="flex items-center gap-2 p-3 bg-stone-50 rounded-lg">
+            <Checkbox
+              checked={formData.is_ad}
+              onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_ad: checked }))}
+            />
+            <div className="flex items-center gap-2">
+              <Tag className="h-4 w-4 text-stone-600" />
+              <Label className="text-sm font-medium text-stone-700 cursor-pointer">
+                Mark as sponsored/ad content
+              </Label>
+            </div>
           </div>
 
           {/* Submit */}

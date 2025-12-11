@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, ExternalLink, Copy, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Heart, ExternalLink, Copy, MoreHorizontal, Pencil, Trash2, Link2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { base44 } from '@/api/base44Client';
@@ -95,14 +95,25 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
             )}
           </div>
 
-          {/* Category badge */}
-          {product.category && (
-            <div className="absolute top-3 left-3">
+          {/* Top left badges */}
+          <div className="absolute top-3 left-3 flex flex-col gap-2">
+            {product.affiliate_link && (
+              <Badge className="bg-emerald-500/90 text-white hover:bg-emerald-500 border-0 shadow-sm text-xs font-medium flex items-center gap-1 w-fit">
+                <Link2 className="h-3 w-3" />
+                Affiliate
+              </Badge>
+            )}
+            {product.is_ad && (
+              <Badge className="bg-blue-500/90 text-white hover:bg-blue-500 border-0 shadow-sm text-xs font-medium w-fit">
+                Ad
+              </Badge>
+            )}
+            {product.category && (
               <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
                 {product.subcategory ? `${product.category} > ${product.subcategory}` : product.category}
               </Badge>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Bottom actions */}
           <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

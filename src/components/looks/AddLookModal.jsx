@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Loader2, ImageIcon, X, Search } from 'lucide-react';
+import { Upload, Loader2, ImageIcon, X, Search, Tag } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -211,9 +211,23 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
                     ))
                   )}
                 </div>
-              </div>
+                </div>
 
-          {/* Submit */}
+                {/* Ad Toggle */}
+                <div className="flex items-center gap-2 p-3 bg-stone-50 rounded-lg">
+                <Checkbox
+                  checked={formData.is_ad}
+                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_ad: checked }))}
+                />
+                <div className="flex items-center gap-2">
+                  <Tag className="h-4 w-4 text-stone-600" />
+                  <Label className="text-sm font-medium text-stone-700 cursor-pointer">
+                    Mark as sponsored/ad content
+                  </Label>
+                </div>
+                </div>
+
+                {/* Submit */}
           <div className="flex gap-3 pt-4">
             <Button
               type="button"
