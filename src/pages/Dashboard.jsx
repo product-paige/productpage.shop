@@ -478,29 +478,33 @@ export default function Dashboard() {
                   );
                   return (
                     <motion.div
-                      key={collection.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all"
+                     key={collection.id}
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
+                     onClick={() => {
+                       setEditingCollection(collection);
+                       setShowCollectionModal(true);
+                     }}
                     >
-                      <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
-                        {collection.image_url ? (
-                          <img src={collection.image_url} alt={collection.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <FolderOpen className="h-12 w-12 text-stone-300" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold text-stone-900 mb-1">{collection.name}</h3>
-                        {collection.description && (
-                          <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
-                        )}
-                        <p className="text-xs text-stone-400">
-                          {collectionProducts.length} {collectionProducts.length === 1 ? 'product' : 'products'}
-                        </p>
-                      </div>
+                     <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
+                       {collection.image_url ? (
+                         <img src={collection.image_url} alt={collection.name} className="w-full h-full object-cover" />
+                       ) : (
+                         <div className="w-full h-full flex items-center justify-center">
+                           <FolderOpen className="h-12 w-12 text-stone-300" />
+                         </div>
+                       )}
+                     </div>
+                     <div className="p-4">
+                       <h3 className="text-lg font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
+                       {collection.description && (
+                         <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
+                       )}
+                       <p className="text-xs text-stone-400">
+                         {collectionProducts.length} {collectionProducts.length === 1 ? 'product' : 'products'}
+                       </p>
+                     </div>
                     </motion.div>
                   );
                 })}
