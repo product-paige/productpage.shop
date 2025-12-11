@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MoreHorizontal, Pencil, Trash2, Package } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash2, Package, Pin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
   DropdownMenu,
@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger } from
 "@/components/ui/dropdown-menu";
 
-export default function LookCard({ look, products, onEdit, onDelete, onViewProducts, isAdmin }) {
+export default function LookCard({ look, products, onEdit, onDelete, onViewProducts, onTogglePin, isAdmin }) {
   const lookProducts = products.filter((p) => look.product_ids?.includes(p.id));
   const placeholderImage = "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=800&fit=crop&auto=format";
 
@@ -45,7 +45,17 @@ export default function LookCard({ look, products, onEdit, onDelete, onViewProdu
 
           {/* Admin actions */}
           {isAdmin &&
-          <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {onTogglePin && (
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className={`h-8 w-8 rounded-full shadow-lg ${look.is_pinned ? 'bg-rose-500 hover:bg-rose-600' : 'bg-white/90 hover:bg-white'}`}
+                  onClick={(e) => { e.stopPropagation(); onTogglePin(look); }}
+                >
+                  <Pin className={`h-4 w-4 ${look.is_pinned ? 'text-white' : 'text-stone-600'}`} />
+                </Button>
+              )}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button

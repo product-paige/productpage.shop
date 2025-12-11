@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, ExternalLink, Copy, MoreHorizontal, Pencil, Trash2, Percent } from 'lucide-react';
+import { Heart, ExternalLink, Copy, MoreHorizontal, Pencil, Trash2, Percent, Pin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { base44 } from '@/api/base44Client';
@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite, isAdmin = true }) {
+export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite, onTogglePin, isAdmin = true }) {
   // Get any available affiliate link
   const getAffiliateLink = () => {
     if (product.affiliate_links) {
@@ -75,6 +75,16 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
           
           {/* Top actions */}
           <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {onTogglePin && isAdmin && (
+              <Button
+                size="icon"
+                variant="secondary"
+                className={`h-8 w-8 rounded-full shadow-lg ${product.is_pinned ? 'bg-rose-500 hover:bg-rose-600' : 'bg-white/90 hover:bg-white'}`}
+                onClick={(e) => { e.stopPropagation(); onTogglePin(product); }}
+              >
+                <Pin className={`h-4 w-4 ${product.is_pinned ? 'text-white' : 'text-stone-600'}`} />
+              </Button>
+            )}
             {onToggleFavorite && (
               <Button
                 size="icon"

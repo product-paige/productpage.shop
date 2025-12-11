@@ -66,20 +66,34 @@ export default function Shop() {
   const categories = [...new Set(products.filter((p) => p.category).map((p) => p.category))];
   const subcategories = [...new Set(products.filter((p) => p.subcategory).map((p) => p.subcategory))];
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || product.category === filterCategory || product.subcategory === filterCategory;
-    const matchesFavorites = !showFavoritesOnly || product.is_favorite;
-    return matchesSearch && matchesCategory && matchesFavorites;
-  });
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = filterCategory === 'all' || product.category === filterCategory || product.subcategory === filterCategory;
+      const matchesFavorites = !showFavoritesOnly || product.is_favorite;
+      return matchesSearch && matchesCategory && matchesFavorites;
+    })
+    .sort((a, b) => {
+      if (a.is_pinned && !b.is_pinned) return -1;
+      if (!a.is_pinned && b.is_pinned) return 1;
+      return 0;
+    });
 
-  const filteredLooks = looks.filter((look) =>
-  look.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredLooks = looks
+    .filter((look) => look.name?.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => {
+      if (a.is_pinned && !b.is_pinned) return -1;
+      if (!a.is_pinned && b.is_pinned) return 1;
+      return 0;
+    });
 
-  const filteredCollections = collections.filter((collection) =>
-  collection.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCollections = collections
+    .filter((collection) => collection.name?.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => {
+      if (a.is_pinned && !b.is_pinned) return -1;
+      if (!a.is_pinned && b.is_pinned) return 1;
+      return 0;
+    });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-orange-50/30">
