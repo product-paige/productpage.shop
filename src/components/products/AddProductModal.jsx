@@ -12,10 +12,23 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Link, Upload, Loader2, ImageIcon, X, Tag } from 'lucide-react';
+import { Link, Upload, Loader2, ImageIcon, X, Tag, ChevronsUpDown, Check } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 export default function AddProductModal({ open, onOpenChange, onProductAdded, editingProduct }) {
   const [activeTab, setActiveTab] = useState('url');
@@ -27,6 +40,18 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     queryKey: ['collections'],
     queryFn: () => base44.entities.Collection.list(),
   });
+
+  const { data: allProducts = [] } = useQuery({
+    queryKey: ['all-products'],
+    queryFn: () => base44.entities.Product.list(),
+  });
+
+  // Extract unique categories and subcategories
+  const existingCategories = [...new Set(allProducts.filter(p => p.category).map(p => p.category))].sort();
+  const existingSubcategories = [...new Set(allProducts.filter(p => p.subcategory).map(p => p.subcategory))].sort();
+
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [subcategoryOpen, setSubcategoryOpen] = useState(false);
   
   const [formData, setFormData] = useState(editingProduct || {
     name: '',
@@ -314,21 +339,107 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label className="text-sm font-medium text-stone-700">Category</Label>
-              <Input
-                placeholder="e.g., Beauty"
-                value={formData.category}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="h-10 rounded-lg border-stone-200"
-              />
+              <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={categoryOpen}
+                    className="w-full h-10 justify-between rounded-lg border-stone-200"
+                  >
+                    {formData.category || "Select category..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput 
+                      placeholder="Search or type new..." 
+                      value={formData.category}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                    />
+                    <CommandEmpty>
+                      <div className="p-2 text-sm text-stone-500">
+                        Press Enter to create "{formData.category}"
+                      </div>
+                    </CommandEmpty>
+                    <CommandGroup>
+                      <ScrollArea className="max-h-[200px]">
+                        {existingCategories.map((cat) => (
+                          <CommandItem
+                            key={cat}
+                            value={cat}
+                            onSelect={(value) => {
+                              setFormData(prev => ({ ...prev, category: value }));
+                              setCategoryOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                formData.category === cat ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            {cat}
+                          </CommandItem>
+                        ))}
+                      </ScrollArea>
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="space-y-2">
               <Label className="text-sm font-medium text-stone-700">Subcategory</Label>
-              <Input
-                placeholder="e.g., Skincare"
-                value={formData.subcategory}
-                onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
-                className="h-10 rounded-lg border-stone-200"
-              />
+              <Popover open={subcategoryOpen} onOpenChange={setSubcategoryOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={subcategoryOpen}
+                    className="w-full h-10 justify-between rounded-lg border-stone-200"
+                  >
+                    {formData.subcategory || "Select subcategory..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput 
+                      placeholder="Search or type new..." 
+                      value={formData.subcategory}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, subcategory: value }))}
+                    />
+                    <CommandEmpty>
+                      <div className="p-2 text-sm text-stone-500">
+                        Press Enter to create "{formData.subcategory}"
+                      </div>
+                    </CommandEmpty>
+                    <CommandGroup>
+                      <ScrollArea className="max-h-[200px]">
+                        {existingSubcategories.map((sub) => (
+                          <CommandItem
+                            key={sub}
+                            value={sub}
+                            onSelect={(value) => {
+                              setFormData(prev => ({ ...prev, subcategory: value }));
+                              setSubcategoryOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                formData.subcategory === sub ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            {sub}
+                          </CommandItem>
+                        ))}
+                      </ScrollArea>
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
 
