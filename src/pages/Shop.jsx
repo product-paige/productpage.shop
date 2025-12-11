@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -27,6 +28,19 @@ export default function Shop() {
   const [viewingCollection, setViewingCollection] = useState(null);
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await base44.auth.me();
+        setCurrentUser(user);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   // Track analytics
   const trackEvent = async (eventType, productId = null, lookId = null) => {
@@ -95,6 +109,17 @@ export default function Shop() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
+          <div className="flex flex-col items-center mb-6">
+            <Avatar className="w-20 h-20 mb-4 border-2 border-stone-200">
+              <AvatarImage src={currentUser?.avatar_url} alt={currentUser?.username || 'User'} />
+              <AvatarFallback className="bg-gradient-to-br from-rose-500 to-orange-400 text-white text-2xl">
+                {currentUser?.username?.charAt(0).toUpperCase() || 'A'}
+              </AvatarFallback>
+            </Avatar>
+            {currentUser?.username && (
+              <p className="text-sm font-medium text-stone-600 mb-2">@{currentUser.username}</p>
+            )}
+          </div>
           <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-3" style={{ fontFamily: 'Instrument Serif, serif' }}>
             Shop My Favorites
           </h2>
