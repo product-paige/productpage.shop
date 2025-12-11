@@ -110,8 +110,12 @@ export default function Shop() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <div className="flex flex-col items-center mb-6">
-            <Avatar className="w-20 h-20 mb-4 border-2 border-stone-200">
-              <AvatarImage src={currentUser?.avatar_url} alt={currentUser?.username || 'User'} />
+            <Avatar className="w-24 h-24 mb-4 border-2 border-stone-200">
+              <AvatarImage 
+                src={currentUser?.avatar_url} 
+                alt={currentUser?.username || 'User'} 
+                className="object-cover"
+              />
               <AvatarFallback className="bg-gradient-to-br from-rose-500 to-orange-400 text-white text-2xl">
                 {currentUser?.username?.charAt(0).toUpperCase() || 'A'}
               </AvatarFallback>
