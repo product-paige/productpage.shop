@@ -20,7 +20,7 @@ export default function BrandCard({ brand }) {
         <div className="p-6">
           {/* Logo and Header */}
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-16 h-16 rounded-lg bg-stone-100 flex items-center justify-center overflow-hidden flex-shrink-0 border border-stone-700">
+            <div className="w-16 h-16 rounded-lg bg-stone-100 flex items-center justify-center overflow-hidden flex-shrink-0 border" style={{borderColor: '#E7E5E4'}}>
               {brand.logo_url ?
               <img
                 src={brand.logo_url}
@@ -59,16 +59,14 @@ export default function BrandCard({ brand }) {
             {brand.commission_rate &&
             <div className="flex items-center gap-2 text-sm">
                 <DollarSign className="h-4 w-4 text-emerald-600" />
-                <span className="text-emerald-600">
-                  <span className="font-medium text-emerald-600">{brand.commission_rate}</span> commission
-                </span>
+                <span className="font-medium text-emerald-600">{brand.commission_rate}</span>
               </div>
             }
             
             {brand.cookie_duration &&
             <div className="flex items-center gap-2 text-sm">
                 <Clock className="h-4 w-4 text-stone-500" />
-                <span className="text-stone-600">{brand.cookie_duration} cookie</span>
+                <span className="text-stone-600">{brand.cookie_duration} cookie notice</span>
               </div>
             }
 
