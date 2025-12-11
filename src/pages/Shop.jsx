@@ -18,11 +18,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '@/components/products/ProductCard';
 import LookCard from '@/components/looks/LookCard';
 import ViewLookModal from '@/components/looks/ViewLookModal';
+import ViewCollectionModal from '@/components/collections/ViewCollectionModal';
 
 export default function Shop() {
   const [activeTab, setActiveTab] = useState('looks');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewingLook, setViewingLook] = useState(null);
+  const [viewingCollection, setViewingCollection] = useState(null);
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
@@ -264,7 +266,8 @@ export default function Shop() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all group"
+                        className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all group cursor-pointer"
+                        onClick={() => setViewingCollection(collection)}
                       >
                         <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
                           {collection.image_url ? (
@@ -331,6 +334,14 @@ export default function Shop() {
         open={!!viewingLook}
         onOpenChange={() => setViewingLook(null)}
         look={viewingLook}
+        products={products}
+      />
+
+      {/* View Collection Modal */}
+      <ViewCollectionModal
+        open={!!viewingCollection}
+        onOpenChange={() => setViewingCollection(null)}
+        collection={viewingCollection}
         products={products}
       />
     </div>
