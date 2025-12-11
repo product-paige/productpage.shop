@@ -75,16 +75,18 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
           
           {/* Top actions */}
           <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <Button
-              size="icon"
-              variant="secondary"
-              className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
-              onClick={(e) => { e.stopPropagation(); onToggleFavorite(product); }}
-            >
-              <Heart 
-                className={`h-4 w-4 transition-colors ${product.is_favorite ? 'fill-rose-500 text-rose-500' : 'text-stone-600'}`} 
-              />
-            </Button>
+            {onToggleFavorite && (
+              <Button
+                size="icon"
+                variant="secondary"
+                className="h-8 w-8 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                onClick={(e) => { e.stopPropagation(); onToggleFavorite(product); }}
+              >
+                <Heart 
+                  className={`h-4 w-4 transition-colors ${product.is_favorite ? 'fill-rose-500 text-rose-500' : 'text-stone-600'}`} 
+                />
+              </Button>
+            )}
             {isAdmin && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
