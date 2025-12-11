@@ -159,18 +159,27 @@ export default function Dashboard() {
               </div>
               <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
             </div>
-            
-            <Button
-              onClick={() => {
-                if (activeTab === 'products') setShowAddModal(true);
-                else if (activeTab === 'looks') setShowAddLookModal(true);
-                else setShowCollectionModal(true);
-              }}
-              className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm"
-            >
-              <Plus className="h-4 w-4 mr-1.5" />
-              {activeTab === 'products' ? 'Add Product' : activeTab === 'looks' ? 'Add Look' : 'Add Collection'}
-            </Button>
+
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => window.location.href = '/settings'}
+                variant="outline"
+                className="h-9 px-4 rounded-full"
+              >
+                Settings
+              </Button>
+              <Button
+                onClick={() => {
+                  if (activeTab === 'products') setShowAddModal(true);
+                  else if (activeTab === 'looks') setShowAddLookModal(true);
+                  else setShowCollectionModal(true);
+                }}
+                className="h-9 px-4 rounded-full bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-600 hover:to-orange-500 text-white border-0 shadow-md shadow-rose-500/20 text-sm"
+              >
+                <Plus className="h-4 w-4 mr-1.5" />
+                {activeTab === 'products' ? 'Add Product' : activeTab === 'looks' ? 'Add Look' : 'Add Collection'}
+              </Button>
+            </div>
           </div>
         </div>
       </header>

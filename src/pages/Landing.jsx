@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles, Link as LinkIcon, TrendingUp, Zap } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
+import { loadStripe } from '@stripe/stripe-js';
 
 export default function Landing() {
   const handleSignUp = async (tier) => {
@@ -12,9 +13,13 @@ export default function Landing() {
     if (!isAuthenticated) {
       base44.auth.redirectToLogin(window.location.pathname + `?tier=${tier}`);
     } else {
-      // Update user tier and redirect to dashboard
-      await base44.auth.updateMe({ subscription_tier: tier });
-      window.location.href = '/dashboard';
+      if (tier === 'free') {
+        await base44.auth.updateMe({ subscription_tier: 'free' });
+        window.location.href = '/dashboard';
+      } else {
+        // Redirect to Stripe for Pro plan
+        window.location.href = '/settings';
+      }
     }
   };
 
