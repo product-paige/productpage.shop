@@ -36,7 +36,7 @@ export default function BrandCard({ brand }) {
             </div>
 
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-stone-900 text-lg leading-tight mb-2">
+              <h3 className="font-semibold text-stone-900 text-xl leading-tight mb-2">
                 {brand.name}
               </h3>
               {brand.category && (
