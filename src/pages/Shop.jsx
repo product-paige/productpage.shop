@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Search, Loader2, Sparkles, Heart, SlidersHorizontal } from 'lucide-react';
+import { Search, Loader2, Sparkles, Heart, SlidersHorizontal, FolderOpen } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,6 +50,11 @@ export default function Shop() {
     queryFn: () => base44.entities.Look.list('-created_date'),
   });
 
+  const { data: collections = [], isLoading: collectionsLoading } = useQuery({
+    queryKey: ['collections'],
+    queryFn: () => base44.entities.Collection.list('-created_date'),
+  });
+
   // Get unique categories and subcategories
   const categories = [...new Set(products.filter(p => p.category).map(p => p.category))];
   const subcategories = [...new Set(products.filter(p => p.subcategory).map(p => p.subcategory))];
@@ -63,6 +68,10 @@ export default function Shop() {
 
   const filteredLooks = looks.filter(look =>
     look.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredCollections = collections.filter(collection =>
+    collection.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -94,10 +103,14 @@ export default function Shop() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 h-11 bg-stone-100 rounded-lg p-1">
+          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 h-11 bg-stone-100 rounded-lg p-1">
             <TabsTrigger value="looks" className="rounded-lg text-sm font-medium">
               <Sparkles className="h-4 w-4 mr-1.5" />
               Shop my style
+            </TabsTrigger>
+            <TabsTrigger value="collections" className="rounded-lg text-sm font-medium">
+              <FolderOpen className="h-4 w-4 mr-1.5" />
+              Collections
             </TabsTrigger>
             <TabsTrigger value="products" className="rounded-lg text-sm font-medium">
               All Products
@@ -224,6 +237,56 @@ export default function Shop() {
                       isAdmin={false}
                     />
                   ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="collections" className="mt-8">
+            {collectionsLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
+              </div>
+            ) : filteredCollections.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-stone-500">No collections found</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <AnimatePresence mode="popLayout">
+                  {filteredCollections.map((collection) => {
+                    const collectionProducts = products.filter(p => 
+                      p.collection_ids?.includes(collection.id)
+                    );
+                    return (
+                      <motion.div
+                        key={collection.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="bg-white rounded-lg border border-stone-200 overflow-hidden hover:shadow-lg transition-all group"
+                      >
+                        <div className="aspect-video bg-gradient-to-br from-stone-100 to-stone-50 relative">
+                          {collection.image_url ? (
+                            <img src={collection.image_url} alt={collection.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <FolderOpen className="h-12 w-12 text-stone-300" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-4">
+                          <h3 className="text-lg font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
+                          {collection.description && (
+                            <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
+                          )}
+                          <p className="text-xs text-stone-400">
+                            {collectionProducts.length} {collectionProducts.length === 1 ? 'product' : 'products'}
+                          </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </AnimatePresence>
               </div>
             )}
