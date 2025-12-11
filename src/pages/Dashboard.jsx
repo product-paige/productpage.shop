@@ -220,7 +220,7 @@ export default function Dashboard() {
             className="bg-white rounded-lg p-4 border border-stone-100 shadow-sm"
           >
             <p className="text-xs text-stone-500 font-medium mb-1">Categories</p>
-            <p className="text-2xl font-bold text-stone-900" style={{ fontFamily: 'Instrument Serif, serif' }}>{categories.length}</p>
+            <p className="text-2xl font-bold text-stone-900" style={{ fontFamily: 'Instrument Serif, serif' }}>{allCategories.length}</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
