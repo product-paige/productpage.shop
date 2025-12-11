@@ -230,6 +230,12 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
             {product.name}
           </h3>
 
+          {product.retailer && (
+            <p className="text-xs text-stone-500 mb-2">
+              {product.retailer}
+            </p>
+          )}
+
           {product.commission_rate && (
             <p className="text-xs text-emerald-600 font-medium mb-2">
               {product.commission_rate} commission

@@ -55,6 +55,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
   
   const [formData, setFormData] = useState(editingProduct || {
     name: '',
+    retailer: '',
     price: '',
     product_url: '',
     affiliate_links: { US: '', CA: '', UK: '' },
@@ -73,6 +74,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     } else {
       setFormData({
         name: '',
+        retailer: '',
         price: '',
         product_url: '',
         affiliate_links: { US: '', CA: '', UK: '' },
@@ -244,14 +246,25 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             )}
           </div>
 
-          {/* Product Name & Price */}
+          {/* Product Name */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Product Name *</Label>
+            <Input
+              placeholder="e.g., Summer Dress Collection"
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              className="h-10 rounded-lg border-stone-200"
+            />
+          </div>
+
+          {/* Retailer & Price */}
           <div className="grid grid-cols-[1fr,auto] gap-3">
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-stone-700">Product Name *</Label>
+              <Label className="text-sm font-medium text-stone-700">Retailer/Brand</Label>
               <Input
-                placeholder="e.g., Summer Dress Collection"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="e.g., Zara, Nike, Amazon"
+                value={formData.retailer}
+                onChange={(e) => setFormData(prev => ({ ...prev, retailer: e.target.value }))}
                 className="h-10 rounded-lg border-stone-200"
               />
             </div>
