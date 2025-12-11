@@ -46,13 +46,13 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                 )}
                 <div className="flex flex-wrap gap-4">
                   {product.affiliate_links?.US && (
-                    <div className="flex gap-1">
+                    <div className="flex gap-2">
                       <Button
                         size="sm"
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.US, '_blank')}
                       >
-                        🇺🇸 Shop now
+                        Shop now 🇺🇸
                       </Button>
                       <Button
                         size="icon"
@@ -65,13 +65,13 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                     </div>
                   )}
                   {product.affiliate_links?.CA && (
-                    <div className="flex gap-1">
+                    <div className="flex gap-2">
                       <Button
                         size="sm"
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.CA, '_blank')}
                       >
-                        🇨🇦 Shop now
+                        Shop now 🇨🇦
                       </Button>
                       <Button
                         size="icon"
@@ -84,13 +84,13 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                     </div>
                   )}
                   {product.affiliate_links?.UK && (
-                    <div className="flex gap-1">
+                    <div className="flex gap-2">
                       <Button
                         size="sm"
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.UK, '_blank')}
                       >
-                        🇬🇧 Shop now
+                        Shop now 🇬🇧
                       </Button>
                       <Button
                         size="icon"
