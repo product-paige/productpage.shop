@@ -27,6 +27,7 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
   const [formData, setFormData] = useState(editingLook || {
     name: '',
     image_url: '',
+    video_url: '',
     description: '',
     product_ids: [],
   });
@@ -38,6 +39,7 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
       setFormData({
         name: '',
         image_url: '',
+        video_url: '',
         description: '',
         product_ids: [],
       });
@@ -109,9 +111,20 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 mt-4">
+          {/* Video URL */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Video URL (TikTok or Instagram Reel)</Label>
+            <Input
+              placeholder="Paste TikTok or Instagram Reel URL"
+              value={formData.video_url}
+              onChange={(e) => setFormData(prev => ({ ...prev, video_url: e.target.value }))}
+              className="h-10 rounded-lg border-stone-200"
+            />
+          </div>
+
           {/* Image */}
           <div className="space-y-3">
-                <Label className="text-sm font-medium text-stone-700">Look Image</Label>
+                <Label className="text-sm font-medium text-stone-700">Look Image (fallback if no video)</Label>
                 {formData.image_url ? (
                   <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-stone-100">
                     <img 

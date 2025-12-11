@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,13 +6,38 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Copy } from 'lucide-react';
+import { ExternalLink, Copy, Play } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Helper function to get embed URL
+const getEmbedUrl = (url) => {
+  if (!url) return null;
+  
+  // TikTok
+  if (url.includes('tiktok.com')) {
+    const videoIdMatch = url.match(/\/video\/(\d+)/);
+    if (videoIdMatch) {
+      return `https://www.tiktok.com/embed/v2/${videoIdMatch[1]}`;
+    }
+  }
+  
+  // Instagram
+  if (url.includes('instagram.com')) {
+    const cleanUrl = url.split('?')[0];
+    return `${cleanUrl}embed`;
+  }
+  
+  return null;
+};
+
 export default function ViewLookModal({ open, onOpenChange, look, products }) {
+  const [videoError, setVideoError] = useState(false);
+
   if (!look) return null;
 
   const lookProducts = products.filter(p => look.product_ids?.includes(p.id));
+  const embedUrl = getEmbedUrl(look.video_url);
+  const showVideo = look.video_url && embedUrl && !videoError;
 
   const copyAffiliateLink = (link) => {
     if (link) {
@@ -23,7 +48,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">{look.name}</DialogTitle>
           {look.description && (
@@ -31,101 +56,92 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
           )}
         </DialogHeader>
 
-        <div className="space-y-4 mt-4">
-          {lookProducts.map((product) => (
-            <div key={product.id} className="flex gap-4 p-4 border border-stone-200 rounded-lg hover:bg-stone-50 transition-colors">
-              <img
-                src={product.image_url || 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=200&h=200&fit=crop'}
-                alt={product.name}
-                className="w-24 h-24 rounded-lg object-cover"
-              />
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-stone-900 mb-2">{product.name}</h4>
-                {product.notes && (
-                  <p className="text-sm text-stone-600 mb-3">{product.notes}</p>
-                )}
-                <div className="flex flex-wrap gap-4">
-                  {product.affiliate_links?.US && (
-                    <div className="flex gap-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+          {/* Left: Video or Image */}
+          <div className="space-y-4">
+            {showVideo ? (
+              <div className="relative w-full aspect-[9/16] bg-stone-100 rounded-lg overflow-hidden">
+                <iframe
+                  src={embedUrl}
+                  className="w-full h-full"
+                  allowFullScreen
+                  scrolling="no"
+                  allow="encrypted-media"
+                  onError={() => setVideoError(true)}
+                />
+              </div>
+            ) : look.image_url ? (
+              <div className="relative w-full aspect-[9/16] bg-stone-100 rounded-lg overflow-hidden">
+                <img
+                  src={look.image_url}
+                  alt={look.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-full aspect-[9/16] bg-stone-100 rounded-lg flex items-center justify-center">
+                <p className="text-stone-400">No media available</p>
+              </div>
+            )}
+          </div>
+
+          {/* Right: Products */}
+          <div className="space-y-4 overflow-y-auto max-h-[70vh]">
+            {lookProducts.map((product) => (
+              <div key={product.id} className="flex gap-3 p-3 border border-stone-200 rounded-lg hover:bg-stone-50 transition-colors">
+                <img
+                  src={product.image_url || 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=200&h=200&fit=crop'}
+                  alt={product.name}
+                  className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-stone-900 text-sm mb-1">{product.name}</h4>
+                  {product.notes && (
+                    <p className="text-xs text-stone-600 mb-2 line-clamp-2">{product.notes}</p>
+                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {product.affiliate_links?.US && (
                       <Button
                         size="sm"
-                        className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
+                        className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.US, '_blank')}
                       >
-                        <span className="mr-2">🇺🇸</span> Shop now
+                        🇺🇸 Shop
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="h-8 w-8 rounded-full"
-                        onClick={() => copyAffiliateLink(product.affiliate_links.US)}
-                      >
-                        <Copy className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  )}
-                  {product.affiliate_links?.CA && (
-                    <div className="flex gap-1">
+                    )}
+                    {product.affiliate_links?.CA && (
                       <Button
                         size="sm"
-                        className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
+                        className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.CA, '_blank')}
                       >
-                        <span className="mr-2">🇨🇦</span> Shop now
+                        🇨🇦 Shop
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="h-8 w-8 rounded-full"
-                        onClick={() => copyAffiliateLink(product.affiliate_links.CA)}
-                      >
-                        <Copy className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  )}
-                  {product.affiliate_links?.UK && (
-                    <div className="flex gap-1">
+                    )}
+                    {product.affiliate_links?.UK && (
                       <Button
                         size="sm"
-                        className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
+                        className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.UK, '_blank')}
                       >
-                        <span className="mr-2">🇬🇧</span> Shop now
+                        🇬🇧 Shop
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="h-8 w-8 rounded-full"
-                        onClick={() => copyAffiliateLink(product.affiliate_links.UK)}
-                      >
-                        <Copy className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  )}
-                  {product.affiliate_link && !product.affiliate_links && (
-                    <div className="flex gap-1">
+                    )}
+                    {product.affiliate_link && !product.affiliate_links && (
                       <Button
                         size="sm"
-                        className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
+                        className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_link, '_blank')}
                       >
                         <ExternalLink className="h-3 w-3 mr-1" />
-                        Shop Now
+                        Shop
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="h-8 w-8 rounded-full"
-                        onClick={() => copyAffiliateLink(product.affiliate_link)}
-                      >
-                        <Copy className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
