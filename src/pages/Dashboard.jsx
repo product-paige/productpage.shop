@@ -50,8 +50,7 @@ export default function Dashboard() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('grid');
-  const [filterCategory, setFilterCategory] = useState('all');
-  const [filterSubcategory, setFilterSubcategory] = useState('all');
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   
@@ -108,18 +107,23 @@ export default function Dashboard() {
     },
   });
 
-  // Get unique categories and subcategories
-  const categories = [...new Set(products.filter(p => p.category).map(p => p.category))];
-  const subcategories = [...new Set(products.filter(p => p.subcategory).map(p => p.subcategory))];
+  // Get unique categories and subcategories combined
+  const allCategories = [
+    ...new Set([
+      ...products.filter(p => p.category).map(p => p.category),
+      ...products.filter(p => p.subcategory).map(p => p.subcategory)
+    ])
+  ].sort();
 
   // Filter products
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           product.notes?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || product.category === filterCategory;
-    const matchesSubcategory = filterSubcategory === 'all' || product.subcategory === filterSubcategory;
+    const matchesCategory = selectedCategories.length === 0 || 
+                           selectedCategories.includes(product.category) || 
+                           selectedCategories.includes(product.subcategory);
     const matchesFavorites = !showFavoritesOnly || product.is_favorite;
-    return matchesSearch && matchesCategory && matchesSubcategory && matchesFavorites;
+    return matchesSearch && matchesCategory && matchesFavorites;
   });
 
   const handleEdit = (product) => {
@@ -248,43 +252,55 @@ export default function Dashboard() {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="h-10 px-4 rounded-lg border-stone-200">
                   <SlidersHorizontal className="h-4 w-4 mr-2" />
-                  {filterCategory === 'all' ? 'All Categories' : filterCategory}
+                  {selectedCategories.length === 0 ? 'All Categories' : `${selectedCategories.length} selected`}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={() => setFilterCategory('all')}>
-                  All Categories
-                </DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="px-2 py-1.5 text-xs font-semibold text-stone-500">
+                  Filter by Category
+                </div>
                 <DropdownMenuSeparator />
-                {categories.map(cat => (
-                  <DropdownMenuItem key={cat} onClick={() => setFilterCategory(cat)}>
-                    {cat}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {subcategories.length > 0 && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="h-10 px-4 rounded-lg border-stone-200">
-                    <SlidersHorizontal className="h-4 w-4 mr-2" />
-                    {filterSubcategory === 'all' ? 'All Subcategories' : filterSubcategory}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => setFilterSubcategory('all')}>
-                    All Subcategories
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  {subcategories.map(subcat => (
-                    <DropdownMenuItem key={subcat} onClick={() => setFilterSubcategory(subcat)}>
-                      {subcat}
+                <div className="max-h-64 overflow-y-auto">
+                  {allCategories.map(cat => (
+                    <DropdownMenuItem 
+                      key={cat} 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedCategories(prev => 
+                          prev.includes(cat) 
+                            ? prev.filter(c => c !== cat)
+                            : [...prev, cat]
+                        );
+                      }}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <Checkbox
+                        checked={selectedCategories.includes(cat)}
+                        onCheckedChange={(checked) => {
+                          setSelectedCategories(prev => 
+                            checked 
+                              ? [...prev, cat]
+                              : prev.filter(c => c !== cat)
+                          );
+                        }}
+                      />
+                      <span className="text-sm">{cat}</span>
                     </DropdownMenuItem>
                   ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+                </div>
+                {selectedCategories.length > 0 && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => setSelectedCategories([])}
+                      className="text-xs text-stone-500 justify-center"
+                    >
+                      Clear all
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <Button
               variant={showFavoritesOnly ? "default" : "outline"}
@@ -316,26 +332,18 @@ export default function Dashboard() {
         </div>
 
         {/* Active Filters */}
-        {(filterCategory !== 'all' || filterSubcategory !== 'all' || showFavoritesOnly || searchQuery) && (
+        {(selectedCategories.length > 0 || showFavoritesOnly || searchQuery) && (
           <div className="flex flex-wrap gap-2 mb-6">
-            {filterCategory !== 'all' && (
+            {selectedCategories.map(cat => (
               <Badge 
+                key={cat}
                 variant="secondary" 
                 className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
-                onClick={() => setFilterCategory('all')}
+                onClick={() => setSelectedCategories(prev => prev.filter(c => c !== cat))}
               >
-                {filterCategory} ×
+                {cat} ×
               </Badge>
-            )}
-            {filterSubcategory !== 'all' && (
-              <Badge 
-                variant="secondary" 
-                className="bg-stone-100 text-stone-700 hover:bg-stone-200 cursor-pointer"
-                onClick={() => setFilterSubcategory('all')}
-              >
-                {filterSubcategory} ×
-              </Badge>
-            )}
+            ))}
             {showFavoritesOnly && (
               <Badge 
                 variant="secondary" 
