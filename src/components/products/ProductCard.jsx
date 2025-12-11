@@ -119,11 +119,6 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
                 Ad
               </Badge>
             )}
-            {hasMultipleRegions && availableRegions.length < 3 && (
-              <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
-                {availableRegions.map(r => r === 'US' ? '🇺🇸' : r === 'CA' ? '🇨🇦' : '🇬🇧').join(' ')}
-              </Badge>
-            )}
             {product.category && (
               <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
                 {product.category}
@@ -131,42 +126,95 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
             )}
           </div>
 
-          {/* Bottom actions */}
+          {/* Bottom actions - Region buttons */}
           <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {getAffiliateLink() && (
+            {product.affiliate_links?.US && (
               <Button
                 size="sm"
                 className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
-                onClick={copyAffiliateLink}
-              >
-                <Copy className="h-3.5 w-3.5 mr-1.5" />
-                Copy Link
-              </Button>
-            )}
-            {getAffiliateLink() && (
-              <Button
-                size="icon"
-                variant="secondary"
-                className="h-9 w-9 rounded-full bg-white/95 hover:bg-white shadow-lg"
                 onClick={async (e) => {
                   e.stopPropagation();
-
-                  // Track click
                   if (!isAdmin) {
                     try {
                       await base44.entities.Analytics.create({
-                        event_type: 'product_click',
+                        event_type: 'affiliate_click',
                         product_id: product.id,
                       });
                     } catch (error) {
                       console.error('Failed to track click:', error);
                     }
                   }
-
-                  window.open(getAffiliateLink(), '_blank');
+                  window.open(product.affiliate_links.US, '_blank');
                 }}
               >
-                <ExternalLink className="h-4 w-4 text-stone-600" />
+                🇺🇸 US
+              </Button>
+            )}
+            {product.affiliate_links?.CA && (
+              <Button
+                size="sm"
+                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  if (!isAdmin) {
+                    try {
+                      await base44.entities.Analytics.create({
+                        event_type: 'affiliate_click',
+                        product_id: product.id,
+                      });
+                    } catch (error) {
+                      console.error('Failed to track click:', error);
+                    }
+                  }
+                  window.open(product.affiliate_links.CA, '_blank');
+                }}
+              >
+                🇨🇦 CA
+              </Button>
+            )}
+            {product.affiliate_links?.UK && (
+              <Button
+                size="sm"
+                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  if (!isAdmin) {
+                    try {
+                      await base44.entities.Analytics.create({
+                        event_type: 'affiliate_click',
+                        product_id: product.id,
+                      });
+                    } catch (error) {
+                      console.error('Failed to track click:', error);
+                    }
+                  }
+                  window.open(product.affiliate_links.UK, '_blank');
+                }}
+              >
+                🇬🇧 UK
+              </Button>
+            )}
+            {product.affiliate_link && !product.affiliate_links && (
+              <Button
+                size="sm"
+                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  if (!isAdmin) {
+                    try {
+                      await base44.entities.Analytics.create({
+                        event_type: 'affiliate_click',
+                        product_id: product.id,
+                      });
+                    } catch (error) {
+                      console.error('Failed to track click:', error);
+                    }
+                  }
+                  window.open(product.affiliate_link, '_blank');
+                }}
+              >
+                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                Shop
               </Button>
             )}
           </div>
