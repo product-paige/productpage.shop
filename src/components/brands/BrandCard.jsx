@@ -20,7 +20,7 @@ export default function BrandCard({ brand }) {
         <div className="p-6">
           {/* Logo and Header */}
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-16 h-16 rounded-lg bg-stone-100 flex items-center justify-center overflow-hidden flex-shrink-0 border-2 border-stone-700">
+            <div className="w-16 h-16 rounded-lg bg-stone-100 flex items-center justify-center overflow-hidden flex-shrink-0 border border-stone-700">
               {brand.logo_url ? (
                 <img 
                   src={brand.logo_url} 
@@ -40,7 +40,7 @@ export default function BrandCard({ brand }) {
                 {brand.name}
               </h3>
               {brand.category && (
-                <Badge className="bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs">
+                <Badge className="bg-black text-white hover:bg-stone-900 text-xs">
                   {brand.category}
                 </Badge>
               )}
