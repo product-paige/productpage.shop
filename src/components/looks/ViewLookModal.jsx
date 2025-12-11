@@ -52,7 +52,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.US, '_blank')}
                       >
-                        🇺🇸 Shop now
+                        <span className="mr-2">🇺🇸</span> Shop now
                       </Button>
                       <Button
                         size="icon"
@@ -71,7 +71,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.CA, '_blank')}
                       >
-                        🇨🇦 Shop now
+                        <span className="mr-2">🇨🇦</span> Shop now
                       </Button>
                       <Button
                         size="icon"
@@ -90,7 +90,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
                         onClick={() => window.open(product.affiliate_links.UK, '_blank')}
                       >
-                        🇬🇧 Shop now
+                        <span className="mr-2">🇬🇧</span> Shop now
                       </Button>
                       <Button
                         size="icon"
