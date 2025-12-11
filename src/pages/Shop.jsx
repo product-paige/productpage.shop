@@ -95,7 +95,7 @@ export default function Shop() {
                   <span className="text-white font-bold text-sm">{user?.username?.[0] || 'A'}</span>
                 </div>
               )}
-              <h1 className="text-lg font-semibold text-stone-900">{user?.username || 'Affiliate Hub'}</h1>
+              <h1 className="text-lg font-semibold text-stone-900">@{user?.username || 'Affiliate Hub'}</h1>
             </div>
           </div>
         </div>
