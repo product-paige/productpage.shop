@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   Dialog,
   DialogContent,
@@ -22,7 +23,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
   const [fetchingImage, setFetchingImage] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  const { data: collections = [] } = base44.useQuery({
+  const { data: collections = [] } = useQuery({
     queryKey: ['collections'],
     queryFn: () => base44.entities.Collection.list(),
   });
