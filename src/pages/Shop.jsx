@@ -89,13 +89,13 @@ export default function Shop() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               {user?.avatar_url ? (
-                <img src={user.avatar_url} alt={user.full_name} className="w-9 h-9 rounded-lg object-cover" />
+                <img src={user.avatar_url} alt={user.username} className="w-9 h-9 rounded-full object-cover" />
               ) : (
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">{user?.full_name?.[0] || 'A'}</span>
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">{user?.username?.[0] || 'A'}</span>
                 </div>
               )}
-              <h1 className="text-lg font-semibold text-stone-900">{user?.full_name || 'Affiliate Hub'}</h1>
+              <h1 className="text-lg font-semibold text-stone-900">{user?.username || 'Affiliate Hub'}</h1>
             </div>
           </div>
         </div>
