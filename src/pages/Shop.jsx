@@ -279,7 +279,7 @@ export default function Shop() {
                           )}
                         </div>
                         <div className="p-4">
-                          <h3 className="text-lg font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
+                          <h3 className="text-xl font-semibold text-stone-900 mb-1 group-hover:text-rose-600 transition-colors">{collection.name}</h3>
                           {collection.description && (
                             <p className="text-sm text-stone-500 mb-3">{collection.description}</p>
                           )}
