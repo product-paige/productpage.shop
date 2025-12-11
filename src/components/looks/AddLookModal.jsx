@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Dialog,
   DialogContent,
@@ -10,15 +11,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Loader2, ImageIcon, X, Search, Tag } from 'lucide-react';
+import { Plus, Upload, Loader2, ImageIcon, X, Search, Tag } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import AddProductModal from '@/components/products/AddProductModal';
 
 export default function AddLookModal({ open, onOpenChange, onLookAdded, editingLook, products }) {
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [productSearch, setProductSearch] = useState('');
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
   
   const [formData, setFormData] = useState(editingLook || {
     name: '',
@@ -168,11 +172,23 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
               </div>
 
               {/* Products */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-stone-700">
-                  Select Products * ({formData.product_ids?.length || 0} selected)
-                </Label>
-                <div className="relative mb-2">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-sm font-medium text-stone-700">
+                    Select Products * ({formData.product_ids?.length || 0} selected)
+                  </Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowAddProductModal(true)}
+                    className="h-8 px-3 rounded-lg border-stone-200 text-xs"
+                  >
+                    <Plus className="h-3.5 w-3.5 mr-1.5" />
+                    New Product
+                  </Button>
+                </div>
+                <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
                   <Input
                     placeholder="Search products..."
@@ -253,6 +269,15 @@ export default function AddLookModal({ open, onOpenChange, onLookAdded, editingL
           </div>
         </form>
       </DialogContent>
+
+      <AddProductModal
+        open={showAddProductModal}
+        onOpenChange={setShowAddProductModal}
+        onProductAdded={() => {
+          queryClient.invalidateQueries({ queryKey: ['products'] });
+          setShowAddProductModal(false);
+        }}
+      />
     </Dialog>
   );
 }
