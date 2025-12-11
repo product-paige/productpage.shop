@@ -7,13 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, Crown, Link as LinkIcon, User, Instagram, MessageCircle, Youtube, Check } from 'lucide-react';
+import { Loader2, Crown, Link as LinkIcon, User, Instagram, MessageCircle, Youtube, Check, Upload, X } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from 'sonner';
 import { loadStripe } from '@stripe/stripe-js';
 
 export default function Settings() {
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -49,6 +51,22 @@ export default function Settings() {
   const handleSave = async (e) => {
     e.preventDefault();
     updateMutation.mutate(formData);
+  };
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingAvatar(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setFormData(prev => ({ ...prev, avatar_url: file_url }));
+      toast.success('Image uploaded!');
+    } catch (error) {
+      toast.error('Failed to upload image');
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   const handleUpgradeToPro = async () => {
@@ -212,15 +230,66 @@ export default function Settings() {
               />
             </div>
 
-            {/* Avatar URL */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-stone-700">Profile Picture URL</Label>
-              <Input
-                placeholder="https://..."
-                value={formData.avatar_url}
-                onChange={(e) => setFormData(prev => ({ ...prev, avatar_url: e.target.value }))}
-                className="h-10 rounded-lg border-stone-200"
-              />
+            {/* Avatar */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium text-stone-700">Profile Picture</Label>
+              
+              <div className="flex items-center gap-4">
+                <Avatar className="w-20 h-20 border-2 border-stone-200">
+                  <AvatarImage src={formData.avatar_url} alt="Profile" />
+                  <AvatarFallback className="bg-gradient-to-br from-rose-500 to-orange-400 text-white text-2xl">
+                    {formData.username?.charAt(0).toUpperCase() || 'A'}
+                  </AvatarFallback>
+                </Avatar>
+
+                <div className="flex-1 space-y-2">
+                  <div className="flex gap-2">
+                    <label className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarUpload}
+                        className="hidden"
+                        disabled={uploadingAvatar}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full h-10 rounded-lg border-stone-200"
+                        disabled={uploadingAvatar}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.currentTarget.previousElementSibling.click();
+                        }}
+                      >
+                        {uploadingAvatar ? (
+                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        ) : (
+                          <Upload className="h-4 w-4 mr-2" />
+                        )}
+                        Upload Image
+                      </Button>
+                    </label>
+                    {formData.avatar_url && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10 rounded-lg border-stone-200"
+                        onClick={() => setFormData(prev => ({ ...prev, avatar_url: '' }))}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                  <Input
+                    placeholder="Or paste image URL..."
+                    value={formData.avatar_url}
+                    onChange={(e) => setFormData(prev => ({ ...prev, avatar_url: e.target.value }))}
+                    className="h-10 rounded-lg border-stone-200"
+                  />
+                </div>
+              </div>
             </div>
 
             <Separator />
