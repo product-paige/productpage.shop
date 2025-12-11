@@ -35,16 +35,13 @@ export default function LookCard({ look, products, onEdit, onDelete, onViewProdu
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
-            <Badge className="bg-black/80 text-white hover:bg-black border-0 text-xs font-medium w-fit">
-              Shop the Look
-            </Badge>
-            {look.is_ad && (
+          {look.is_ad && (
+            <div className="absolute top-3 left-3">
               <Badge className="bg-blue-500/90 text-white hover:bg-blue-500 border-0 text-xs font-medium w-fit">
                 Ad
               </Badge>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Admin actions */}
           {isAdmin && (
