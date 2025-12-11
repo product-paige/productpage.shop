@@ -97,11 +97,6 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
 
           {/* Top left badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {product.affiliate_link && (
-              <div className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm rounded-full h-6 w-6 flex items-center justify-center">
-                <Percent className="h-3 w-3" />
-              </div>
-            )}
             {product.is_ad && (
               <Badge className="bg-blue-500/90 text-white hover:bg-blue-500 border-0 shadow-sm text-xs font-medium w-fit">
                 Ad
