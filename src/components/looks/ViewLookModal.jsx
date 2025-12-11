@@ -46,85 +46,81 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                 )}
                 <div className="flex flex-wrap gap-2">
                   {product.affiliate_links?.US && (
-                    <>
+                    <div className="flex gap-1">
                       <Button
                         size="sm"
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
-                        onClick={() => copyAffiliateLink(product.affiliate_links.US)}
-                      >
-                        <Copy className="h-3 w-3 mr-1" />
-                        🇺🇸 Copy
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 px-3 rounded-full text-xs"
                         onClick={() => window.open(product.affiliate_links.US, '_blank')}
                       >
-                        🇺🇸 Shop
+                        🇺🇸 Shop now
                       </Button>
-                    </>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 rounded-full"
+                        onClick={() => copyAffiliateLink(product.affiliate_links.US)}
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   )}
                   {product.affiliate_links?.CA && (
-                    <>
+                    <div className="flex gap-1">
                       <Button
                         size="sm"
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
-                        onClick={() => copyAffiliateLink(product.affiliate_links.CA)}
-                      >
-                        <Copy className="h-3 w-3 mr-1" />
-                        🇨🇦 Copy
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 px-3 rounded-full text-xs"
                         onClick={() => window.open(product.affiliate_links.CA, '_blank')}
                       >
-                        🇨🇦 Shop
+                        🇨🇦 Shop now
                       </Button>
-                    </>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 rounded-full"
+                        onClick={() => copyAffiliateLink(product.affiliate_links.CA)}
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   )}
                   {product.affiliate_links?.UK && (
-                    <>
+                    <div className="flex gap-1">
                       <Button
                         size="sm"
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
-                        onClick={() => copyAffiliateLink(product.affiliate_links.UK)}
-                      >
-                        <Copy className="h-3 w-3 mr-1" />
-                        🇬🇧 Copy
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 px-3 rounded-full text-xs"
                         onClick={() => window.open(product.affiliate_links.UK, '_blank')}
                       >
-                        🇬🇧 Shop
+                        🇬🇧 Shop now
                       </Button>
-                    </>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 rounded-full"
+                        onClick={() => copyAffiliateLink(product.affiliate_links.UK)}
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   )}
                   {product.affiliate_link && !product.affiliate_links && (
-                    <>
+                    <div className="flex gap-1">
                       <Button
                         size="sm"
                         className="h-8 px-3 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
-                        onClick={() => copyAffiliateLink(product.affiliate_link)}
-                      >
-                        <Copy className="h-3 w-3 mr-1" />
-                        Copy Link
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 px-3 rounded-full text-xs"
                         onClick={() => window.open(product.affiliate_link, '_blank')}
                       >
                         <ExternalLink className="h-3 w-3 mr-1" />
                         Shop Now
                       </Button>
-                    </>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 rounded-full"
+                        onClick={() => copyAffiliateLink(product.affiliate_link)}
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   )}
                 </div>
               </div>
