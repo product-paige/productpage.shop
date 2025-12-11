@@ -44,7 +44,7 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                 {product.notes && (
                   <p className="text-sm text-stone-600 mb-3">{product.notes}</p>
                 )}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-4">
                   {product.affiliate_links?.US && (
                     <div className="flex gap-1">
                       <Button
