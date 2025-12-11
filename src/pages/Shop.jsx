@@ -97,10 +97,15 @@ export default function Shop() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
-              <h1 className="text-lg font-semibold text-stone-900">Affiliate Hub</h1>
+              <Avatar className="w-9 h-9 border border-stone-200">
+                <AvatarImage src={currentUser?.avatar_url} alt={currentUser?.username || 'User'} className="object-cover" />
+                <AvatarFallback className="bg-gradient-to-br from-rose-500 to-orange-400 text-white text-sm font-bold">
+                  {currentUser?.username?.charAt(0).toUpperCase() || 'A'}
+                </AvatarFallback>
+              </Avatar>
+              <h1 className="text-lg font-semibold text-stone-900">
+                {currentUser?.username ? `@${currentUser.username}` : 'Affiliate Hub'}
+              </h1>
             </div>
           </div>
         </div>
