@@ -112,37 +112,57 @@ export default function Shop() {
               <h1 className="text-lg font-semibold text-stone-900">@{user?.username || 'Affiliate Hub'}</h1>
             </div>
 
-            <div className="flex items-center gap-2">
-              {user?.social_links?.instagram && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 rounded-full"
-                  onClick={() => window.open(user.social_links.instagram, '_blank')}
-                >
-                  <Instagram className="h-5 w-5 text-stone-600" />
-                </Button>
+            <div className="flex items-center gap-4">
+              {/* Custom Links */}
+              {user?.custom_links && user.custom_links.length > 0 && (
+                <div className="hidden sm:flex items-center gap-1">
+                  {user.custom_links.map((link, index) => (
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      size="sm"
+                      className="h-9 px-3 text-sm font-medium text-stone-600 hover:text-stone-900"
+                      onClick={() => window.open(link.url, '_blank')}
+                    >
+                      {link.label}
+                    </Button>
+                  ))}
+                </div>
               )}
-              {user?.social_links?.tiktok && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 rounded-full"
-                  onClick={() => window.open(user.social_links.tiktok, '_blank')}
-                >
-                  <MessageCircle className="h-5 w-5 text-stone-600" />
-                </Button>
-              )}
-              {user?.social_links?.youtube && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 rounded-full"
-                  onClick={() => window.open(user.social_links.youtube, '_blank')}
-                >
-                  <Youtube className="h-5 w-5 text-stone-600" />
-                </Button>
-              )}
+
+              {/* Social Icons */}
+              <div className="flex items-center gap-2">
+                {user?.social_links?.instagram && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 rounded-full"
+                    onClick={() => window.open(user.social_links.instagram, '_blank')}
+                  >
+                    <Instagram className="h-5 w-5 text-stone-600" />
+                  </Button>
+                )}
+                {user?.social_links?.tiktok && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 rounded-full"
+                    onClick={() => window.open(user.social_links.tiktok, '_blank')}
+                  >
+                    <MessageCircle className="h-5 w-5 text-stone-600" />
+                  </Button>
+                )}
+                {user?.social_links?.youtube && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 rounded-full"
+                    onClick={() => window.open(user.social_links.youtube, '_blank')}
+                  >
+                    <Youtube className="h-5 w-5 text-stone-600" />
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
