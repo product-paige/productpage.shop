@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Search, Loader2, Sparkles, Heart, SlidersHorizontal, FolderOpen, Instagram, MessageCircle, Youtube } from 'lucide-react';
+import { Search, Loader2, Sparkles, Heart, SlidersHorizontal, FolderOpen, Instagram, MessageCircle, Youtube, Menu, ExternalLink } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -112,10 +112,10 @@ export default function Shop() {
               <h1 className="text-lg font-semibold text-stone-900">@{user?.username || 'Affiliate Hub'}</h1>
             </div>
 
-            <div className="flex items-center gap-4">
-              {/* Custom Links */}
+            <div className="flex items-center gap-2">
+              {/* Desktop: Custom Links + Social Icons */}
               {user?.custom_links && user.custom_links.length > 0 && (
-                <div className="hidden sm:flex items-center gap-1">
+                <div className="hidden md:flex items-center gap-1">
                   {user.custom_links.map((link, index) => (
                     <Button
                       key={index}
@@ -130,8 +130,7 @@ export default function Shop() {
                 </div>
               )}
 
-              {/* Social Icons */}
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 {user?.social_links?.instagram && (
                   <Button
                     variant="ghost"
@@ -163,6 +162,53 @@ export default function Shop() {
                   </Button>
                 )}
               </div>
+
+              {/* Mobile: Dropdown Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden h-9 w-9 rounded-full"
+                  >
+                    <Menu className="h-5 w-5 text-stone-600" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {user?.custom_links && user.custom_links.length > 0 && (
+                    <>
+                      {user.custom_links.map((link, index) => (
+                        <DropdownMenuItem
+                          key={index}
+                          onClick={() => window.open(link.url, '_blank')}
+                        >
+                          <ExternalLink className="h-4 w-4 mr-2" />
+                          {link.label}
+                        </DropdownMenuItem>
+                      ))}
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+                  {user?.social_links?.instagram && (
+                    <DropdownMenuItem onClick={() => window.open(user.social_links.instagram, '_blank')}>
+                      <Instagram className="h-4 w-4 mr-2" />
+                      Instagram
+                    </DropdownMenuItem>
+                  )}
+                  {user?.social_links?.tiktok && (
+                    <DropdownMenuItem onClick={() => window.open(user.social_links.tiktok, '_blank')}>
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      TikTok
+                    </DropdownMenuItem>
+                  )}
+                  {user?.social_links?.youtube && (
+                    <DropdownMenuItem onClick={() => window.open(user.social_links.youtube, '_blank')}>
+                      <Youtube className="h-4 w-4 mr-2" />
+                      YouTube
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
