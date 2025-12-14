@@ -29,6 +29,7 @@ export default function Settings() {
     social_links: user?.social_links || { instagram: '', tiktok: '', youtube: '' },
     shop_title: user?.shop_title || '',
     shop_description: user?.shop_description || '',
+    custom_links: user?.custom_links || [],
   });
 
   React.useEffect(() => {
@@ -40,6 +41,7 @@ export default function Settings() {
         social_links: user.social_links || { instagram: '', tiktok: '', youtube: '' },
         shop_title: user.shop_title || '',
         shop_description: user.shop_description || '',
+        custom_links: user.custom_links || [],
       });
     }
   }, [user]);
@@ -371,6 +373,69 @@ export default function Settings() {
                   className="h-10 rounded-lg border-stone-200"
                 />
               </div>
+            </div>
+
+            <Separator />
+
+            {/* Custom Menu Links */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-stone-900">Custom Menu Links</h3>
+                <span className="text-xs text-stone-500">Max 4 links</span>
+              </div>
+              
+              {formData.custom_links.map((link, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    placeholder="Label (e.g., Podcast)"
+                    value={link.label}
+                    onChange={(e) => {
+                      const newLinks = [...formData.custom_links];
+                      newLinks[index] = { ...newLinks[index], label: e.target.value };
+                      setFormData(prev => ({ ...prev, custom_links: newLinks }));
+                    }}
+                    className="h-10 rounded-lg border-stone-200 flex-1"
+                  />
+                  <Input
+                    placeholder="URL"
+                    value={link.url}
+                    onChange={(e) => {
+                      const newLinks = [...formData.custom_links];
+                      newLinks[index] = { ...newLinks[index], url: e.target.value };
+                      setFormData(prev => ({ ...prev, custom_links: newLinks }));
+                    }}
+                    className="h-10 rounded-lg border-stone-200 flex-[2]"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="h-10 w-10 rounded-lg"
+                    onClick={() => {
+                      const newLinks = formData.custom_links.filter((_, i) => i !== index);
+                      setFormData(prev => ({ ...prev, custom_links: newLinks }));
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+
+              {formData.custom_links.length < 4 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-10 rounded-lg border-dashed"
+                  onClick={() => {
+                    setFormData(prev => ({
+                      ...prev,
+                      custom_links: [...prev.custom_links, { label: '', url: '' }]
+                    }));
+                  }}
+                >
+                  + Add Link
+                </Button>
+              )}
             </div>
 
             <Button
