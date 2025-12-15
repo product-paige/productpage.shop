@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Search, Loader2, Sparkles, Heart, SlidersHorizontal, FolderOpen, Instagram, MessageCircle, Youtube, Menu, ExternalLink } from 'lucide-react';
+import { Search, Loader2, Sparkles, Heart, SlidersHorizontal, FolderOpen, Instagram, MessageCircle, Youtube, Menu, ExternalLink, ArrowLeft } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +27,12 @@ export default function Shop() {
   const [viewingCollection, setViewingCollection] = useState(null);
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    setIsPreview(urlParams.get('preview') === 'true');
+  }, []);
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -97,6 +103,25 @@ export default function Shop() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-orange-50/30">
+      {/* Preview Mode Banner */}
+      {isPreview && (
+        <div className="sticky top-0 z-50 bg-gradient-to-r from-primary to-accent text-white px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Preview Mode</span>
+            <span className="text-sm opacity-90">This is how your shop looks to visitors</span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-white hover:bg-white/20 h-8"
+            onClick={() => window.location.href = '/dashboard'}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </div>
+      )}
+      
       {/* Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/80 border-b border-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

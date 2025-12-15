@@ -99,7 +99,7 @@ export default function Settings() {
     }
   };
 
-  const publicUrl = `${window.location.origin}/publicshop?user=${user?.username || ''}`;
+  const publicUrl = `${window.location.origin}/@${user?.username || ''}`;
   const isPro = user?.subscription_tier === 'pro';
 
   if (isLoading) {
@@ -208,7 +208,7 @@ export default function Settings() {
               {formData.username && (
                 <div className="flex items-center gap-2 mt-2">
                   <LinkIcon className="h-4 w-4 text-stone-400" />
-                  <span className="text-sm text-stone-500">{window.location.origin}/publicshop?user={formData.username}</span>
+                  <span className="text-sm text-stone-500">{window.location.origin}/@{formData.username}</span>
                   <Button
                     type="button"
                     variant="outline"
@@ -461,9 +461,9 @@ export default function Settings() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(publicUrl, '_blank')}
+                onClick={() => window.location.href = '/shop?preview=true'}
               >
-                View
+                Preview Shop
               </Button>
             </div>
           </Card>
