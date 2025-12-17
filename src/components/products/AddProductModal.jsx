@@ -30,11 +30,36 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
+const REGIONS = [
+  { code: 'US', name: 'United States', flag: '🇺🇸' },
+  { code: 'CA', name: 'Canada', flag: '🇨🇦' },
+  { code: 'MX', name: 'Mexico', flag: '🇲🇽' },
+  { code: 'UK', name: 'United Kingdom', flag: '🇬🇧' },
+  { code: 'FR', name: 'France', flag: '🇫🇷' },
+  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
+  { code: 'ES', name: 'Spain', flag: '🇪🇸' },
+  { code: 'IT', name: 'Italy', flag: '🇮🇹' },
+  { code: 'NL', name: 'Netherlands', flag: '🇳🇱' },
+  { code: 'SE', name: 'Sweden', flag: '🇸🇪' },
+  { code: 'KR', name: 'South Korea', flag: '🇰🇷' },
+  { code: 'CN', name: 'China', flag: '🇨🇳' },
+  { code: 'IN', name: 'India', flag: '🇮🇳' },
+  { code: 'SG', name: 'Singapore', flag: '🇸🇬' },
+  { code: 'PH', name: 'Philippines', flag: '🇵🇭' },
+  { code: 'AU', name: 'Australia', flag: '🇦🇺' },
+  { code: 'NZ', name: 'New Zealand', flag: '🇳🇿' },
+  { code: 'BR', name: 'Brazil', flag: '🇧🇷' },
+  { code: 'CO', name: 'Colombia', flag: '🇨🇴' },
+  { code: 'AE', name: 'UAE', flag: '🇦🇪' },
+  { code: 'ZA', name: 'South Africa', flag: '🇿🇦' },
+];
+
 export default function AddProductModal({ open, onOpenChange, onProductAdded, editingProduct }) {
   const [activeTab, setActiveTab] = useState('url');
   const [loading, setLoading] = useState(false);
   const [fetchingImage, setFetchingImage] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState('');
 
   const { data: collections = [] } = useQuery({
     queryKey: ['collections'],
@@ -308,273 +333,84 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
           {/* Affiliate Links by Region */}
           <div className="space-y-3">
             <Label className="text-sm font-medium text-stone-700">Affiliate Links by Region</Label>
-            <ScrollArea className="h-[300px] pr-4">
-              <div className="space-y-2">
-                {/* North America */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇺🇸 United States</Label>
-                  <Input
-                    placeholder="US affiliate link..."
-                    value={formData.affiliate_links?.US || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), US: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇨🇦 Canada</Label>
-                  <Input
-                    placeholder="Canada affiliate link..."
-                    value={formData.affiliate_links?.CA || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), CA: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇲🇽 Mexico</Label>
-                  <Input
-                    placeholder="Mexico affiliate link..."
-                    value={formData.affiliate_links?.MX || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), MX: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                
-                {/* Europe */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇬🇧 United Kingdom</Label>
-                  <Input
-                    placeholder="UK affiliate link..."
-                    value={formData.affiliate_links?.UK || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), UK: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇫🇷 France</Label>
-                  <Input
-                    placeholder="France affiliate link..."
-                    value={formData.affiliate_links?.FR || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), FR: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇩🇪 Germany</Label>
-                  <Input
-                    placeholder="Germany affiliate link..."
-                    value={formData.affiliate_links?.DE || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), DE: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇪🇸 Spain</Label>
-                  <Input
-                    placeholder="Spain affiliate link..."
-                    value={formData.affiliate_links?.ES || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), ES: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇮🇹 Italy</Label>
-                  <Input
-                    placeholder="Italy affiliate link..."
-                    value={formData.affiliate_links?.IT || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), IT: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇳🇱 Netherlands</Label>
-                  <Input
-                    placeholder="Netherlands affiliate link..."
-                    value={formData.affiliate_links?.NL || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), NL: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇸🇪 Sweden</Label>
-                  <Input
-                    placeholder="Sweden affiliate link..."
-                    value={formData.affiliate_links?.SE || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), SE: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                
-                {/* Asia */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇰🇷 South Korea</Label>
-                  <Input
-                    placeholder="South Korea affiliate link..."
-                    value={formData.affiliate_links?.KR || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), KR: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇨🇳 China</Label>
-                  <Input
-                    placeholder="China affiliate link..."
-                    value={formData.affiliate_links?.CN || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), CN: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇮🇳 India</Label>
-                  <Input
-                    placeholder="India affiliate link..."
-                    value={formData.affiliate_links?.IN || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), IN: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇸🇬 Singapore</Label>
-                  <Input
-                    placeholder="Singapore affiliate link..."
-                    value={formData.affiliate_links?.SG || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), SG: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇵🇭 Philippines</Label>
-                  <Input
-                    placeholder="Philippines affiliate link..."
-                    value={formData.affiliate_links?.PH || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), PH: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                
-                {/* Australia & Pacific */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇦🇺 Australia</Label>
-                  <Input
-                    placeholder="Australia affiliate link..."
-                    value={formData.affiliate_links?.AU || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), AU: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇳🇿 New Zealand</Label>
-                  <Input
-                    placeholder="New Zealand affiliate link..."
-                    value={formData.affiliate_links?.NZ || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), NZ: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                
-                {/* Latin America */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇧🇷 Brazil</Label>
-                  <Input
-                    placeholder="Brazil affiliate link..."
-                    value={formData.affiliate_links?.BR || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), BR: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇨🇴 Colombia</Label>
-                  <Input
-                    placeholder="Colombia affiliate link..."
-                    value={formData.affiliate_links?.CO || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), CO: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                
-                {/* Middle East & Africa */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇦🇪 UAE</Label>
-                  <Input
-                    placeholder="UAE affiliate link..."
-                    value={formData.affiliate_links?.AE || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), AE: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-stone-500 font-normal">🇿🇦 South Africa</Label>
-                  <Input
-                    placeholder="South Africa affiliate link..."
-                    value={formData.affiliate_links?.ZA || ''}
-                    onChange={(e) => setFormData(prev => ({ 
-                      ...prev, 
-                      affiliate_links: { ...(prev.affiliate_links || {}), ZA: e.target.value }
-                    }))}
-                    className="h-10 rounded-lg border-stone-200"
-                  />
-                </div>
+            
+            {/* Add Region Dropdown */}
+            <div className="flex gap-2">
+              <select
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                className="flex-1 h-10 rounded-lg border border-stone-200 bg-white px-3 text-sm"
+              >
+                <option value="">Select region to add...</option>
+                {REGIONS.filter(region => !formData.affiliate_links?.[region.code]).map(region => (
+                  <option key={region.code} value={region.code}>
+                    {region.flag} {region.name}
+                  </option>
+                ))}
+              </select>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  if (selectedRegion) {
+                    setFormData(prev => ({
+                      ...prev,
+                      affiliate_links: { ...(prev.affiliate_links || {}), [selectedRegion]: '' }
+                    }));
+                    setSelectedRegion('');
+                  }
+                }}
+                disabled={!selectedRegion}
+                className="h-10 px-4 rounded-lg"
+              >
+                Add
+              </Button>
+            </div>
+
+            {/* Active Regions */}
+            {Object.keys(formData.affiliate_links || {}).filter(code => formData.affiliate_links[code] !== undefined).length > 0 && (
+              <div className="space-y-2 border border-stone-200 rounded-lg p-3 max-h-[250px] overflow-y-auto">
+                {Object.entries(formData.affiliate_links || {})
+                  .filter(([_, link]) => link !== undefined)
+                  .map(([code, link]) => {
+                    const region = REGIONS.find(r => r.code === code);
+                    if (!region) return null;
+                    return (
+                      <div key={code} className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs text-stone-500 font-normal">
+                            {region.flag} {region.name}
+                          </Label>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={() => {
+                              setFormData(prev => {
+                                const newLinks = { ...prev.affiliate_links };
+                                delete newLinks[code];
+                                return { ...prev, affiliate_links: newLinks };
+                              });
+                            }}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <Input
+                          placeholder={`${region.name} affiliate link...`}
+                          value={link || ''}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            affiliate_links: { ...(prev.affiliate_links || {}), [code]: e.target.value }
+                          }))}
+                          className="h-9 rounded-lg border-stone-200"
+                        />
+                      </div>
+                    );
+                  })}
               </div>
-            </ScrollArea>
+            )}
           </div>
 
           {/* Category & Subcategory */}
