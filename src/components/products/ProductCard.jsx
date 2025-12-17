@@ -137,84 +137,81 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
               </Badge>
             )}
             {product.category && (
-              <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 text-xs font-medium shadow-none">
+              <Badge className="bg-white/90 text-stone-700 hover:bg-white border-0 shadow-sm text-xs font-medium">
                 {product.category}
               </Badge>
             )}
           </div>
 
           {/* Bottom actions - Region buttons */}
-          <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {product.affiliate_links?.US && (
-              <Button
-                size="sm"
-                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  if (!isAdmin) {
-                    try {
-                      await base44.entities.Analytics.create({
-                        event_type: 'affiliate_click',
-                        product_id: product.id,
-                      });
-                    } catch (error) {
-                      console.error('Failed to track click:', error);
-                    }
-                  }
-                  window.open(product.affiliate_links.US, '_blank');
-                }}
-              >
-                🇺🇸 US
-              </Button>
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.US, '_blank'); }}>🇺🇸</Button>
             )}
             {product.affiliate_links?.CA && (
-              <Button
-                size="sm"
-                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  if (!isAdmin) {
-                    try {
-                      await base44.entities.Analytics.create({
-                        event_type: 'affiliate_click',
-                        product_id: product.id,
-                      });
-                    } catch (error) {
-                      console.error('Failed to track click:', error);
-                    }
-                  }
-                  window.open(product.affiliate_links.CA, '_blank');
-                }}
-              >
-                🇨🇦 CA
-              </Button>
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.CA, '_blank'); }}>🇨🇦</Button>
+            )}
+            {product.affiliate_links?.MX && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.MX, '_blank'); }}>🇲🇽</Button>
             )}
             {product.affiliate_links?.UK && (
-              <Button
-                size="sm"
-                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  if (!isAdmin) {
-                    try {
-                      await base44.entities.Analytics.create({
-                        event_type: 'affiliate_click',
-                        product_id: product.id,
-                      });
-                    } catch (error) {
-                      console.error('Failed to track click:', error);
-                    }
-                  }
-                  window.open(product.affiliate_links.UK, '_blank');
-                }}
-              >
-                🇬🇧 UK
-              </Button>
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.UK, '_blank'); }}>🇬🇧</Button>
+            )}
+            {product.affiliate_links?.FR && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.FR, '_blank'); }}>🇫🇷</Button>
+            )}
+            {product.affiliate_links?.DE && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.DE, '_blank'); }}>🇩🇪</Button>
+            )}
+            {product.affiliate_links?.ES && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.ES, '_blank'); }}>🇪🇸</Button>
+            )}
+            {product.affiliate_links?.IT && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.IT, '_blank'); }}>🇮🇹</Button>
+            )}
+            {product.affiliate_links?.NL && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.NL, '_blank'); }}>🇳🇱</Button>
+            )}
+            {product.affiliate_links?.SE && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.SE, '_blank'); }}>🇸🇪</Button>
+            )}
+            {product.affiliate_links?.KR && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.KR, '_blank'); }}>🇰🇷</Button>
+            )}
+            {product.affiliate_links?.CN && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.CN, '_blank'); }}>🇨🇳</Button>
+            )}
+            {product.affiliate_links?.IN && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.IN, '_blank'); }}>🇮🇳</Button>
+            )}
+            {product.affiliate_links?.SG && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.SG, '_blank'); }}>🇸🇬</Button>
+            )}
+            {product.affiliate_links?.PH && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.PH, '_blank'); }}>🇵🇭</Button>
+            )}
+            {product.affiliate_links?.AU && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.AU, '_blank'); }}>🇦🇺</Button>
+            )}
+            {product.affiliate_links?.NZ && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.NZ, '_blank'); }}>🇳🇿</Button>
+            )}
+            {product.affiliate_links?.BR && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.BR, '_blank'); }}>🇧🇷</Button>
+            )}
+            {product.affiliate_links?.CO && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.CO, '_blank'); }}>🇨🇴</Button>
+            )}
+            {product.affiliate_links?.AE && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.AE, '_blank'); }}>🇦🇪</Button>
+            )}
+            {product.affiliate_links?.ZA && (
+              <Button size="sm" className="flex-1 min-w-[60px] bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium" onClick={async (e) => { e.stopPropagation(); if (!isAdmin) { try { await base44.entities.Analytics.create({ event_type: 'affiliate_click', product_id: product.id }); } catch (error) { console.error('Failed to track click:', error); } } window.open(product.affiliate_links.ZA, '_blank'); }}>🇿🇦</Button>
             )}
             {product.affiliate_link && !product.affiliate_links && (
               <Button
                 size="sm"
-                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-9 text-xs font-medium"
+                className="flex-1 bg-black hover:bg-stone-900 text-white rounded-full h-8 text-xs font-medium"
                 onClick={async (e) => {
                   e.stopPropagation();
                   if (!isAdmin) {

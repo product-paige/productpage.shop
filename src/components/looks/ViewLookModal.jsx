@@ -99,34 +99,28 @@ export default function ViewLookModal({ open, onOpenChange, look, products }) {
                   {product.notes && (
                     <p className="text-xs text-stone-600 mb-2 line-clamp-2">{product.notes}</p>
                   )}
-                  <div className="flex flex-wrap gap-2">
-                    {product.affiliate_links?.US && (
-                      <Button
-                        size="sm"
-                        className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
-                        onClick={() => window.open(product.affiliate_links.US, '_blank')}
-                      >
-                        🇺🇸 Shop
-                      </Button>
-                    )}
-                    {product.affiliate_links?.CA && (
-                      <Button
-                        size="sm"
-                        className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
-                        onClick={() => window.open(product.affiliate_links.CA, '_blank')}
-                      >
-                        🇨🇦 Shop
-                      </Button>
-                    )}
-                    {product.affiliate_links?.UK && (
-                      <Button
-                        size="sm"
-                        className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs"
-                        onClick={() => window.open(product.affiliate_links.UK, '_blank')}
-                      >
-                        🇬🇧 Shop
-                      </Button>
-                    )}
+                  <div className="flex flex-wrap gap-1.5">
+                    {product.affiliate_links?.US && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.US, '_blank')}>🇺🇸</Button>}
+                    {product.affiliate_links?.CA && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.CA, '_blank')}>🇨🇦</Button>}
+                    {product.affiliate_links?.MX && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.MX, '_blank')}>🇲🇽</Button>}
+                    {product.affiliate_links?.UK && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.UK, '_blank')}>🇬🇧</Button>}
+                    {product.affiliate_links?.FR && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.FR, '_blank')}>🇫🇷</Button>}
+                    {product.affiliate_links?.DE && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.DE, '_blank')}>🇩🇪</Button>}
+                    {product.affiliate_links?.ES && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.ES, '_blank')}>🇪🇸</Button>}
+                    {product.affiliate_links?.IT && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.IT, '_blank')}>🇮🇹</Button>}
+                    {product.affiliate_links?.NL && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.NL, '_blank')}>🇳🇱</Button>}
+                    {product.affiliate_links?.SE && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.SE, '_blank')}>🇸🇪</Button>}
+                    {product.affiliate_links?.KR && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.KR, '_blank')}>🇰🇷</Button>}
+                    {product.affiliate_links?.CN && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.CN, '_blank')}>🇨🇳</Button>}
+                    {product.affiliate_links?.IN && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.IN, '_blank')}>🇮🇳</Button>}
+                    {product.affiliate_links?.SG && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.SG, '_blank')}>🇸🇬</Button>}
+                    {product.affiliate_links?.PH && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.PH, '_blank')}>🇵🇭</Button>}
+                    {product.affiliate_links?.AU && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.AU, '_blank')}>🇦🇺</Button>}
+                    {product.affiliate_links?.NZ && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.NZ, '_blank')}>🇳🇿</Button>}
+                    {product.affiliate_links?.BR && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.BR, '_blank')}>🇧🇷</Button>}
+                    {product.affiliate_links?.CO && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.CO, '_blank')}>🇨🇴</Button>}
+                    {product.affiliate_links?.AE && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.AE, '_blank')}>🇦🇪</Button>}
+                    {product.affiliate_links?.ZA && <Button size="sm" className="h-7 px-2 rounded-full bg-black hover:bg-stone-900 text-white text-xs" onClick={() => window.open(product.affiliate_links.ZA, '_blank')}>🇿🇦</Button>}
                     {product.affiliate_link && !product.affiliate_links && (
                       <Button
                         size="sm"
