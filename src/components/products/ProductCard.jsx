@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite, onTogglePin, isAdmin = true }) {
+export default function ProductCard({ product, onEdit, onDelete, onToggleFavorite, onTogglePin, onView, isAdmin = true }) {
   // Get any available affiliate link
   const getAffiliateLink = () => {
     if (product.affiliate_links) {
@@ -234,7 +234,16 @@ export default function ProductCard({ product, onEdit, onDelete, onToggleFavorit
           </div>
         </div>
 
-        <div className="p-4" onClick={isAdmin && onEdit ? () => onEdit(product) : undefined}>
+        <div 
+        className="p-4 cursor-pointer" 
+        onClick={() => {
+          if (isAdmin && onEdit) {
+            onEdit(product);
+          } else if (onView) {
+            onView(product);
+          }
+        }}
+      >
           <h3 className="font-semibold text-stone-900 text-lg leading-tight mb-1">
             {product.name}
           </h3>

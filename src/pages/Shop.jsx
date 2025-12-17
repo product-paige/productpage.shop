@@ -19,12 +19,14 @@ import ProductCard from '@/components/products/ProductCard';
 import LookCard from '@/components/looks/LookCard';
 import ViewLookModal from '@/components/looks/ViewLookModal';
 import ViewCollectionModal from '@/components/collections/ViewCollectionModal';
+import ViewProductModal from '@/components/products/ViewProductModal';
 
 export default function Shop() {
   const [activeTab, setActiveTab] = useState('looks');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewingLook, setViewingLook] = useState(null);
   const [viewingCollection, setViewingCollection] = useState(null);
+  const [viewingProduct, setViewingProduct] = useState(null);
   const [filterCategory, setFilterCategory] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
@@ -460,12 +462,15 @@ export default function Shop() {
                   key={product.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  onClick={() => trackEvent('product_view', product.id)}>
+                  exit={{ opacity: 0, y: -20 }}>
 
                       <ProductCard
                     product={product}
                     onToggleFavorite={() => {}}
+                    onView={(p) => {
+                      trackEvent('product_view', p.id);
+                      setViewingProduct(p);
+                    }}
                     isAdmin={false} />
 
                     </motion.div>
@@ -492,6 +497,16 @@ export default function Shop() {
         collection={viewingCollection}
         products={products} />
 
-    </div>);
+      {/* View Product Modal */}
+      <ViewProductModal
+        open={!!viewingProduct}
+        onOpenChange={() => setViewingProduct(null)}
+        product={viewingProduct}
+        looks={looks}
+        collections={collections}
+        onViewLook={setViewingLook}
+        onViewCollection={setViewingCollection} />
 
-}
+      </div>);
+
+      }
