@@ -33,25 +33,7 @@ import { cn } from "@/lib/utils";
 const REGIONS = [
   { code: 'US', name: 'United States', flag: '🇺🇸' },
   { code: 'CA', name: 'Canada', flag: '🇨🇦' },
-  { code: 'MX', name: 'Mexico', flag: '🇲🇽' },
   { code: 'UK', name: 'United Kingdom', flag: '🇬🇧' },
-  { code: 'FR', name: 'France', flag: '🇫🇷' },
-  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
-  { code: 'ES', name: 'Spain', flag: '🇪🇸' },
-  { code: 'IT', name: 'Italy', flag: '🇮🇹' },
-  { code: 'NL', name: 'Netherlands', flag: '🇳🇱' },
-  { code: 'SE', name: 'Sweden', flag: '🇸🇪' },
-  { code: 'KR', name: 'South Korea', flag: '🇰🇷' },
-  { code: 'CN', name: 'China', flag: '🇨🇳' },
-  { code: 'IN', name: 'India', flag: '🇮🇳' },
-  { code: 'SG', name: 'Singapore', flag: '🇸🇬' },
-  { code: 'PH', name: 'Philippines', flag: '🇵🇭' },
-  { code: 'AU', name: 'Australia', flag: '🇦🇺' },
-  { code: 'NZ', name: 'New Zealand', flag: '🇳🇿' },
-  { code: 'BR', name: 'Brazil', flag: '🇧🇷' },
-  { code: 'CO', name: 'Colombia', flag: '🇨🇴' },
-  { code: 'AE', name: 'UAE', flag: '🇦🇪' },
-  { code: 'ZA', name: 'South Africa', flag: '🇿🇦' },
 ];
 
 export default function AddProductModal({ open, onOpenChange, onProductAdded, editingProduct }) {
