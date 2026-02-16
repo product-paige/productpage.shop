@@ -163,17 +163,16 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         }));
         
         if (result.image_urls && result.image_urls.length > 0) {
-          // Upload images to Base44 storage to avoid CORS issues
+          // Upload images to Base44 storage via backend function to avoid CORS issues
           toast.success('Uploading images...');
           const uploadedUrls = [];
           
           for (const url of result.image_urls.slice(0, 10)) {
             try {
-              const response = await fetch(url);
-              const blob = await response.blob();
-              const file = new File([blob], 'product-image.jpg', { type: blob.type });
-              const { file_url } = await base44.integrations.Core.UploadFile({ file });
-              uploadedUrls.push(file_url);
+              const response = await base44.functions.invoke('fetchAndUploadImage', { image_url: url });
+              if (response.data?.file_url) {
+                uploadedUrls.push(response.data.file_url);
+              }
             } catch (err) {
               console.error('Failed to upload image:', url);
             }
