@@ -124,18 +124,22 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
     setFetchingImage(true);
     try {
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Extract product information from this URL: ${formData.product_url}
+        prompt: `Extract product information from this product page URL: ${formData.product_url}
         
-        Try to identify:
-        1. The product name
-        2. ALL available image URLs for the product (look for og:image, product images, gallery images, thumbnail images)
+        Please extract:
+        1. Product name - the full product title
+        2. Retailer/Brand - the store or brand name (e.g., "Nike", "Amazon", "Zara")
+        3. Price - just the number without currency symbol (e.g., "29.99")
+        4. Image URLs - ALL available product images (og:image, main product images, gallery images)
         
-        Return all valid image URLs you can find, preferably multiple options.`,
+        Return as many valid image URLs as you can find.`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
           properties: {
             product_name: { type: "string" },
+            retailer: { type: "string" },
+            price: { type: "string" },
             image_urls: { 
               type: "array",
               items: { type: "string" }
@@ -144,17 +148,22 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         }
       });
 
-      if (result.product_name || result.image_urls) {
+      if (result.product_name || result.retailer || result.price || result.image_urls) {
         setFormData(prev => ({
           ...prev,
-          name: prev.name || result.product_name || ''
+          name: prev.name || result.product_name || '',
+          retailer: prev.retailer || result.retailer || '',
+          price: prev.price || result.price || ''
         }));
         
         if (result.image_urls && result.image_urls.length > 0) {
           setImageOptions(result.image_urls);
-          // Auto-select first image
-          setFormData(prev => ({ ...prev, image_url: result.image_urls[0] }));
-          toast.success(`Product info fetched! ${result.image_urls.length} images found`);
+          // Auto-select first image if not already set
+          setFormData(prev => ({ 
+            ...prev, 
+            image_url: prev.image_url || result.image_urls[0] 
+          }));
+          toast.success(`Info fetched! ${result.image_urls.length} image${result.image_urls.length > 1 ? 's' : ''} found`);
         } else {
           toast.success('Product info fetched!');
         }
@@ -219,6 +228,32 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 mt-4">
+          {/* Product URL */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Product Page URL</Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Original product page link..."
+                value={formData.product_url}
+                onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
+                className="h-10 rounded-lg border-stone-200"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={fetchProductInfo}
+                disabled={fetchingImage || !formData.product_url}
+                className="h-10 px-4 rounded-lg border-stone-200 whitespace-nowrap"
+              >
+                {fetchingImage ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  'Auto-fill'
+                )}
+              </Button>
+            </div>
+          </div>
+
           {/* Image Section */}
           <div className="space-y-3">
             <Label className="text-sm font-medium text-stone-700">Product Image</Label>
@@ -312,32 +347,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
                 </TabsContent>
               </Tabs>
             )}
-          </div>
-
-          {/* Product URL */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-stone-700">Product Page URL</Label>
-            <div className="flex gap-2">
-              <Input
-                placeholder="Original product page link..."
-                value={formData.product_url}
-                onChange={(e) => setFormData(prev => ({ ...prev, product_url: e.target.value }))}
-                className="h-10 rounded-lg border-stone-200"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={fetchProductInfo}
-                disabled={fetchingImage || !formData.product_url}
-                className="h-10 px-4 rounded-lg border-stone-200 whitespace-nowrap"
-              >
-                {fetchingImage ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  'Auto-fill'
-                )}
-              </Button>
-            </div>
           </div>
 
           {/* Product Name */}
