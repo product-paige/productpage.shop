@@ -124,12 +124,23 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
       const result = await base44.integrations.Core.InvokeLLM({
         prompt: `Extract product information from this product page URL: ${formData.product_url}
         
-        Please extract:
-        1. Product name - the full product title
+        Extract:
+        1. Product name - the full product title/name
         2. Retailer/Brand - the store or brand name (e.g., "Nike", "Amazon", "Zara")
-        3. Image URLs - ALL available product images (og:image, main product images, gallery images)
+        3. Image URLs - Find ALL product images from these sources:
+           - Main product image (primary/hero image)
+           - Product gallery images (thumbnails, alternate views)
+           - Open Graph image (og:image meta tag)
+           - Twitter card images
+           - Any <img> tags with product photos
+           - High-resolution versions if available
         
-        Return as many valid image URLs as you can find.`,
+        IMPORTANT for images:
+        - Return FULL URLs (not relative paths)
+        - Deduplicate - no repeated URLs
+        - Return at least 5-10 images if available
+        - Prioritize high-quality/large images
+        - Include all angles and color variations`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
