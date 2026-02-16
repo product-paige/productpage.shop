@@ -82,7 +82,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
   const [formData, setFormData] = useState(editingProduct || {
     name: '',
     retailer: '',
-    price: '',
     product_url: '',
     affiliate_links: {},
     image_url: '',
@@ -101,7 +100,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
       setFormData({
         name: '',
         retailer: '',
-        price: '',
         product_url: '',
         affiliate_links: {},
         image_url: '',
@@ -129,8 +127,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         Please extract:
         1. Product name - the full product title
         2. Retailer/Brand - the store or brand name (e.g., "Nike", "Amazon", "Zara")
-        3. Price - just the number without currency symbol (e.g., "29.99")
-        4. Image URLs - ALL available product images (og:image, main product images, gallery images)
+        3. Image URLs - ALL available product images (og:image, main product images, gallery images)
         
         Return as many valid image URLs as you can find.`,
         add_context_from_internet: true,
@@ -139,7 +136,6 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
           properties: {
             product_name: { type: "string" },
             retailer: { type: "string" },
-            price: { type: "string" },
             image_urls: { 
               type: "array",
               items: { type: "string" }
@@ -148,12 +144,11 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         }
       });
 
-      if (result.product_name || result.retailer || result.price || result.image_urls) {
+      if (result.product_name || result.retailer || result.image_urls) {
         setFormData(prev => ({
           ...prev,
           name: prev.name || result.product_name || '',
-          retailer: prev.retailer || result.retailer || '',
-          price: prev.price || result.price || ''
+          retailer: prev.retailer || result.retailer || ''
         }));
         
         if (result.image_urls && result.image_urls.length > 0) {
@@ -360,26 +355,15 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             />
           </div>
 
-          {/* Retailer & Price */}
-          <div className="grid grid-cols-[1fr,auto] gap-3">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-stone-700">Retailer/Brand</Label>
-              <Input
-                placeholder="e.g., Zara, Nike, Amazon"
-                value={formData.retailer}
-                onChange={(e) => setFormData(prev => ({ ...prev, retailer: e.target.value }))}
-                className="h-10 rounded-lg border-stone-200"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-stone-700">Price</Label>
-              <Input
-                placeholder="$99"
-                value={formData.price}
-                onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
-                className="h-10 rounded-lg border-stone-200 w-24"
-              />
-            </div>
+          {/* Retailer */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-stone-700">Retailer/Brand</Label>
+            <Input
+              placeholder="e.g., Zara, Nike, Amazon"
+              value={formData.retailer}
+              onChange={(e) => setFormData(prev => ({ ...prev, retailer: e.target.value }))}
+              className="h-10 rounded-lg border-stone-200"
+            />
           </div>
 
           {/* Affiliate Links by Region */}
