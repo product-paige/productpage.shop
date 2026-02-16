@@ -163,13 +163,32 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         }));
         
         if (result.image_urls && result.image_urls.length > 0) {
-          setImageOptions(result.image_urls);
-          // Auto-select first image if not already set
-          setFormData(prev => ({ 
-            ...prev, 
-            image_url: prev.image_url || result.image_urls[0] 
-          }));
-          toast.success(`Info fetched! ${result.image_urls.length} image${result.image_urls.length > 1 ? 's' : ''} found`);
+          // Upload images to Base44 storage to avoid CORS issues
+          toast.success('Uploading images...');
+          const uploadedUrls = [];
+          
+          for (const url of result.image_urls.slice(0, 10)) {
+            try {
+              const response = await fetch(url);
+              const blob = await response.blob();
+              const file = new File([blob], 'product-image.jpg', { type: blob.type });
+              const { file_url } = await base44.integrations.Core.UploadFile({ file });
+              uploadedUrls.push(file_url);
+            } catch (err) {
+              console.error('Failed to upload image:', url);
+            }
+          }
+          
+          if (uploadedUrls.length > 0) {
+            setImageOptions(uploadedUrls);
+            setFormData(prev => ({ 
+              ...prev, 
+              image_url: prev.image_url || uploadedUrls[0] 
+            }));
+            toast.success(`${uploadedUrls.length} image${uploadedUrls.length > 1 ? 's' : ''} uploaded!`);
+          } else {
+            toast.error('Failed to upload images');
+          }
         } else {
           toast.success('Product info fetched!');
         }
