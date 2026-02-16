@@ -224,21 +224,53 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
             <Label className="text-sm font-medium text-stone-700">Product Image</Label>
 
             {formData.image_url ? (
-              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-stone-100">
-                <img 
-                  src={formData.image_url} 
-                  alt="Product" 
-                  className="w-full h-full object-cover"
-                />
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="secondary"
-                  className="absolute top-2 right-2 h-8 w-8 rounded-full bg-white/90 hover:bg-white"
-                  onClick={() => setFormData(prev => ({ ...prev, image_url: '' }))}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+              <div className="space-y-3">
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-stone-100">
+                  <img 
+                    src={formData.image_url} 
+                    alt="Product" 
+                    className="w-full h-full object-cover"
+                  />
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="secondary"
+                    className="absolute top-2 right-2 h-8 w-8 rounded-full bg-white/90 hover:bg-white"
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, image_url: '' }));
+                      setImageOptions([]);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                {/* Image Options from Auto-fetch */}
+                {imageOptions.length > 1 && (
+                  <div className="space-y-2">
+                    <Label className="text-xs text-stone-500">Choose a different image:</Label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {imageOptions.map((url, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => setFormData(prev => ({ ...prev, image_url: url }))}
+                          className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                            formData.image_url === url 
+                              ? 'border-black ring-2 ring-black ring-offset-2' 
+                              : 'border-stone-200 hover:border-stone-400'
+                          }`}
+                        >
+                          <img 
+                            src={url} 
+                            alt={`Option ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
