@@ -60,6 +60,7 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
   const [fetchingImage, setFetchingImage] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState('');
+  const [imageOptions, setImageOptions] = useState([]);
 
   const { data: collections = [] } = useQuery({
     queryKey: ['collections'],
