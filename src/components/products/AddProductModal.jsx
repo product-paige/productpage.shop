@@ -167,26 +167,37 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
           toast.success('Uploading images...');
           const uploadedUrls = [];
           
-          for (const url of result.image_urls.slice(0, 10)) {
+          // Limit to 5 images and upload in parallel with timeout
+          const imageUrls = result.image_urls.slice(0, 5);
+          const uploadPromises = imageUrls.map(async (url) => {
             try {
-              const response = await base44.functions.invoke('fetchAndUploadImage', { image_url: url });
+              const response = await Promise.race([
+                base44.functions.invoke('fetchAndUploadImage', { image_url: url }),
+                new Promise((_, reject) => 
+                  setTimeout(() => reject(new Error('timeout')), 15000)
+                )
+              ]);
               if (response.data?.file_url) {
-                uploadedUrls.push(response.data.file_url);
+                return response.data.file_url;
               }
             } catch (err) {
               console.error('Failed to upload image:', url);
             }
-          }
+            return null;
+          });
           
-          if (uploadedUrls.length > 0) {
-            setImageOptions(uploadedUrls);
+          const results = await Promise.all(uploadPromises);
+          const validUrls = results.filter(url => url !== null);
+          
+          if (validUrls.length > 0) {
+            setImageOptions(validUrls);
             setFormData(prev => ({ 
               ...prev, 
-              image_url: prev.image_url || uploadedUrls[0] 
+              image_url: prev.image_url || validUrls[0] 
             }));
-            toast.success(`${uploadedUrls.length} image${uploadedUrls.length > 1 ? 's' : ''} uploaded!`);
+            toast.success(`${validUrls.length} image${validUrls.length > 1 ? 's' : ''} uploaded!`);
           } else {
-            toast.error('Failed to upload images');
+            toast.error('Failed to upload images - they may be protected');
           }
         } else {
           toast.success('Product info fetched!');
