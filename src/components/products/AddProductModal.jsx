@@ -128,26 +128,36 @@ export default function AddProductModal({ open, onOpenChange, onProductAdded, ed
         
         Try to identify:
         1. The product name
-        2. A direct image URL for the product (look for og:image, product images, or main images)
+        2. ALL available image URLs for the product (look for og:image, product images, gallery images, thumbnail images)
         
-        Return ONLY valid, working image URLs that end in image extensions or are from known CDNs.`,
+        Return all valid image URLs you can find, preferably multiple options.`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
           properties: {
             product_name: { type: "string" },
-            image_url: { type: "string" }
+            image_urls: { 
+              type: "array",
+              items: { type: "string" }
+            }
           }
         }
       });
 
-      if (result.product_name || result.image_url) {
+      if (result.product_name || result.image_urls) {
         setFormData(prev => ({
           ...prev,
-          name: prev.name || result.product_name || '',
-          image_url: result.image_url || prev.image_url
+          name: prev.name || result.product_name || ''
         }));
-        toast.success('Product info fetched!');
+        
+        if (result.image_urls && result.image_urls.length > 0) {
+          setImageOptions(result.image_urls);
+          // Auto-select first image
+          setFormData(prev => ({ ...prev, image_url: result.image_urls[0] }));
+          toast.success(`Product info fetched! ${result.image_urls.length} images found`);
+        } else {
+          toast.success('Product info fetched!');
+        }
       } else {
         toast.info('Could not auto-fetch product info. Please enter manually.');
       }
