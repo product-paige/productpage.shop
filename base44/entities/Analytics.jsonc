@@ -1,0 +1,31 @@
+{
+  "name": "Analytics",
+  "type": "object",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "product_view",
+        "product_click",
+        "affiliate_click",
+        "look_view"
+      ],
+      "description": "Type of analytics event"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Related product ID"
+    },
+    "look_id": {
+      "type": "string",
+      "description": "Related look ID"
+    },
+    "referrer": {
+      "type": "string",
+      "description": "Where the user came from"
+    }
+  },
+  "required": [
+    "event_type"
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Product name"
+    },
+    "retailer": {
+      "type": "string",
+      "description": "Retailer or brand name"
+    },
+    "price": {
+      "type": "string",
+      "description": "Product price"
+    },
+    "product_url": {
+      "type": "string",
+      "description": "Original product page URL"
+    },
+    "affiliate_link": {
+      "type": "string",
+      "description": "Legacy affiliate link (for backwards compatibility)"
+    },
+    "affiliate_links": {
+      "type": "object",
+      "properties": {
+        "US": {
+          "type": "string",
+          "description": "US affiliate link"
+        },
+        "CA": {
+          "type": "string",
+          "description": "Canada affiliate link"
+        },
+        "UK": {
+          "type": "string",
+          "description": "UK affiliate link"
+        },
+        "FR": {
+          "type": "string",
+          "description": "France affiliate link"
+        },
+        "DE": {
+          "type": "string",
+          "description": "Germany affiliate link"
+        },
+        "ES": {
+          "type": "string",
+          "description": "Spain affiliate link"
+        },
+        "IT": {
+          "type": "string",
+          "description": "Italy affiliate link"
+        },
+        "NL": {
+          "type": "string",
+          "description": "Netherlands affiliate link"
+        },
+        "SE": {
+          "type": "string",
+          "description": "Sweden affiliate link"
+        },
+        "KR": {
+          "type": "string",
+          "description": "South Korea affiliate link"
+        },
+        "CN": {
+          "type": "string",
+          "description": "China affiliate link"
+        },
+        "IN": {
+          "type": "string",
+          "description": "India affiliate link"
+        },
+        "SG": {
+          "type": "string",
+          "description": "Singapore affiliate link"
+        },
+        "PH": {
+          "type": "string",
+          "description": "Philippines affiliate link"
+        },
+        "AU": {
+          "type": "string",
+          "description": "Australia affiliate link"
+        },
+        "NZ": {
+          "type": "string",
+          "description": "New Zealand affiliate link"
+        },
+        "BR": {
+          "type": "string",
+          "description": "Brazil affiliate link"
+        },
+        "MX": {
+          "type": "string",
+          "description": "Mexico affiliate link"
+        },
+        "CO": {
+          "type": "string",
+          "description": "Colombia affiliate link"
+        },
+        "AE": {
+          "type": "string",
+          "description": "UAE affiliate link"
+        },
+        "ZA": {
+          "type": "string",
+          "description": "South Africa affiliate link"
+        }
+      },
+      "description": "Region-specific affiliate links"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Product image URL"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Personal notes, talking points, commission info"
+    },
+    "category": {
+      "type": "string",
+      "description": "Product category for organization"
+    },
+    "subcategory": {
+      "type": "string",
+      "description": "Product subcategory for detailed organization"
+    },
+    "commission_rate": {
+      "type": "string",
+      "description": "Commission percentage or amount"
+    },
+    "is_favorite": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mark as favorite product"
+    },
+    "is_ad": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mark as sponsored/ad content"
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pin to top of list"
+    },
+    "collection_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of collection IDs this product belongs to"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "subscription_tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "pro"
+      ],
+      "default": "free",
+      "description": "Subscription tier - free (branded) or pro (unbranded)"
+    },
+    "username": {
+      "type": "string",
+      "description": "Unique username for bio link (e.g., @username)"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Influencer bio"
+    },
+    "avatar_url": {
+      "type": "string",
+      "description": "Profile picture URL"
+    },
+    "social_links": {
+      "type": "object",
+      "properties": {
+        "instagram": {
+          "type": "string"
+        },
+        "tiktok": {
+          "type": "string"
+        },
+        "youtube": {
+          "type": "string"
+        }
+      },
+      "description": "Social media links"
+    },
+    "custom_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Link label (e.g., 'Podcast', 'Blog')"
+          },
+          "url": {
+            "type": "string",
+            "description": "Link URL"
+          }
+        },
+        "required": [
+          "label",
+          "url"
+        ]
+      },
+      "description": "Custom menu links (e.g., Podcast, Blog, etc.)",
+      "maxItems": 4
+    }
+  },
+  "required": [
+    "username",
+    "bio",
+    "avatar_url",
+    "social_links"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Brand",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Brand name"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "Brand logo image URL"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brand and affiliate program description"
+    },
+    "commission_rate": {
+      "type": "string",
+      "description": "Commission rate or structure"
+    },
+    "program_url": {
+      "type": "string",
+      "description": "Affiliate program application URL"
+    },
+    "category": {
+      "type": "string",
+      "description": "Brand category (e.g., Fashion, Beauty, Tech)"
+    },
+    "cookie_duration": {
+      "type": "string",
+      "description": "Cookie duration (e.g., 30 days)"
+    },
+    "payment_terms": {
+      "type": "string",
+      "description": "Payment terms and schedule"
+    }
+  },
+  "required": [
+    "name",
+    "program_url"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "Look",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Look name (e.g., 'Spring Brunch Outfit')"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Main image for the look"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "Instagram Reel or TikTok video URL"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the look"
+    },
+    "product_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of product IDs included in this look"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Feature this look"
+    },
+    "is_ad": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mark as sponsored/ad content"
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pin to top of list"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
